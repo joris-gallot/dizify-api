@@ -42,23 +42,23 @@ public class TitleController {
 	/**
 	 * Gets Titles by id.
 	 *
-	 * @param TitleId the Title id
+	 * @param titleId the Title id
 	 * @return the Titles by id
 	 * @throws ResourceNotFoundException the resource not found exception
 	 */
 	@GetMapping("/titles/{id}")
 	public ResponseEntity<Title> getTitlesById(@PathVariable(value = "id") Long titleId) throws ResourceNotFoundException {
-		Title Title = titleRepository
+		Title title = titleRepository
 			  				.findById(titleId)
 	  						.orElseThrow(() -> new ResourceNotFoundException(HttpStatus.NOT_FOUND, "Title not found on :: " + titleId));
 	  
-		return ResponseEntity.ok().body(Title);
+		return ResponseEntity.ok().body(title);
 	}
 
 	/**
 	 * Create Title Title.
 	 *
-	 * @param Title the Title
+	 * @param title the Title
 	 * @return the Title
 	 */
 	@PostMapping("/titles")
@@ -76,17 +76,17 @@ public class TitleController {
 	 * @return the response entity
 	 * @throws ResourceNotFoundException the resource not found exception
 	 */
-	@PutMapping("/Titles/{id}")
+	@PutMapping("/titles/{id}")
 	public ResponseEntity<Title> updateTitle(@PathVariable(value = "id") Long titleId, @Validated @RequestBody Title titleDetails) throws ResourceNotFoundException {
-	    Title Title = titleRepository
+	    Title title = titleRepository
 	            			.findById(titleId)
 	            			.orElseThrow(() -> new ResourceNotFoundException(HttpStatus.NOT_FOUND, "Title not found on :: " + titleId));
 
-	    Title.setName(titleDetails.getName());
-	    Title.setDuration(titleDetails.getDuration());
-	    Title.setCreatedAt(titleDetails.getCreatedAt());
-	    Title.setUpdatedAt(new Date());
-	    final Title updatedTitle = titleRepository.save(Title);
+	    title.setName(titleDetails.getName());
+	    title.setDuration(titleDetails.getDuration());
+	    title.setCreatedAt(titleDetails.getCreatedAt());
+	    title.setUpdatedAt(new Date());
+	    final Title updatedTitle = titleRepository.save(title);
 	    return ResponseEntity.ok(updatedTitle);
 	}
 
@@ -97,13 +97,13 @@ public class TitleController {
 	 * @return the map
 	 * @throws Exception the exception
 	 */
-	@DeleteMapping("/Title/{id}")
+	@DeleteMapping("/title/{id}")
 	public Map<String, Boolean> deleteTitle(@PathVariable(value = "id") Long titleId) throws Exception {
-	    Title Title = titleRepository
+	    Title title = titleRepository
 	            			.findById(titleId)
 	            			.orElseThrow(() -> new ResourceNotFoundException(HttpStatus.NOT_FOUND, "Title not found on :: " + titleId));
 
-	    titleRepository.delete(Title);
+	    titleRepository.delete(title);
 	    Map<String, Boolean> response = new HashMap<>();
 	    response.put("deleted", Boolean.TRUE);
 	    return response;

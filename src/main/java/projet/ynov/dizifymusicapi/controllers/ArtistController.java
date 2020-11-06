@@ -42,67 +42,68 @@ public class ArtistController {
 	/**
 	 * Gets Artists by id.
 	 *
-	 * @param ArtistId the Artist id
+	 * @param artistId the Artist id
 	 * @return the Artists by id
 	 * @throws ResourceNotFoundException the resource not found exception
 	 */
 	@GetMapping("/artists/{id}")
-	public ResponseEntity<Artist> getArtistsById(@PathVariable(value = "id") Long ArtistId) throws ResourceNotFoundException {
-		Artist Artist = artistRepository
-			  				.findById(ArtistId)
-	  						.orElseThrow(() -> new ResourceNotFoundException(HttpStatus.NOT_FOUND, "Artist not found on :: " + ArtistId));
+	public ResponseEntity<Artist> getArtistsById(@PathVariable(value = "id") Long artistId) throws ResourceNotFoundException {
+		Artist artist = artistRepository
+			  				.findById(artistId)
+	  						.orElseThrow(() -> new ResourceNotFoundException(HttpStatus.NOT_FOUND, "Artist not found on :: " + artistId));
 	  
-		return ResponseEntity.ok().body(Artist);
+		return ResponseEntity.ok().body(artist);
 	}
 
 	/**
 	 * Create Artist Artist.
 	 *
-	 * @param Artist the Artist
+	 * @param artist the Artist
 	 * @return the Artist
 	 */
 	@PostMapping("/artists")
-	public Artist createArtist(@Validated @RequestBody Artist Artist) {
-		Artist.setCreatedAt(new Date());
-		Artist.setUpdatedAt(new Date());
-		return artistRepository.save(Artist);
+	public Artist createArtist(@Validated @RequestBody Artist artist) {
+		artist.setCreatedAt(new Date());
+		artist.setUpdatedAt(new Date());
+		return artistRepository.save(artist);
 	}
 
 	/**
 	 * Update Artist response entity.
 	 *
-	 * @param ArtistId the Artist id
-	 * @param ArtistDetails the Artist details
+	 * @param artistId the Artist id
+	 * @param artistDetails the Artist details
 	 * @return the response entity
 	 * @throws ResourceNotFoundException the resource not found exception
 	 */
 	@PutMapping("/artists/{id}")
-	public ResponseEntity<Artist> updateArtist(@PathVariable(value = "id") Long ArtistId, @Validated @RequestBody Artist ArtistDetails) throws ResourceNotFoundException {
-	    Artist Artist = artistRepository
-	            			.findById(ArtistId)
-	            			.orElseThrow(() -> new ResourceNotFoundException(HttpStatus.NOT_FOUND, "Artist not found on :: " + ArtistId));
+	public ResponseEntity<Artist> updateArtist(@PathVariable(value = "id") Long artistId, @Validated @RequestBody Artist artistDetails) throws ResourceNotFoundException {
+	    Artist artist = artistRepository
+	            			.findById(artistId)
+	            			.orElseThrow(() -> new ResourceNotFoundException(HttpStatus.NOT_FOUND, "Artist not found on :: " + artistId));
 
-	    Artist.setName(ArtistDetails.getName());
-	    Artist.setImage(ArtistDetails.getImage());
-	    Artist.setUpdatedAt(new Date());
-	    final Artist updatedArtist = artistRepository.save(Artist);
+	    artist.setName(artistDetails.getName());
+	    artist.setImage(artistDetails.getImage());
+	    artist.setCreatedAt(artistDetails.getCreatedAt());
+	    artist.setUpdatedAt(new Date());
+	    final Artist updatedArtist = artistRepository.save(artist);
 	    return ResponseEntity.ok(updatedArtist);
 	}
 
 	/**
 	 * Delete Artist map.
 	 *
-	 * @param ArtistId the Artist id
+	 * @param artistId the Artist id
 	 * @return the map
 	 * @throws Exception the exception
 	 */
 	@DeleteMapping("/artist/{id}")
-	public Map<String, Boolean> deleteArtist(@PathVariable(value = "id") Long ArtistId) throws Exception {
-	    Artist Artist = artistRepository
-	            			.findById(ArtistId)
-	            			.orElseThrow(() -> new ResourceNotFoundException(HttpStatus.NOT_FOUND, "Artist not found on :: " + ArtistId));
+	public Map<String, Boolean> deleteArtist(@PathVariable(value = "id") Long artistId) throws Exception {
+	    Artist artist = artistRepository
+	            			.findById(artistId)
+	            			.orElseThrow(() -> new ResourceNotFoundException(HttpStatus.NOT_FOUND, "Artist not found on :: " + artistId));
 
-	    artistRepository.delete(Artist);
+	    artistRepository.delete(artist);
 	    Map<String, Boolean> response = new HashMap<>();
 	    response.put("deleted", Boolean.TRUE);
 	    return response;

@@ -40,9 +40,9 @@ public class AlbumController {
     }
 
 	/**
-	 * Gets Albums by id.
+	 * Gets lbums by id.
 	 *
-	 * @param AlbumId the Album id
+	 * @param albumId the Album id
 	 * @return the Albums by id
 	 * @throws ResourceNotFoundException the resource not found exception
 	 */
@@ -58,7 +58,7 @@ public class AlbumController {
 	/**
 	 * Create Album Album.
 	 *
-	 * @param Album the Album
+	 * @param album the Album
 	 * @return the Album
 	 */
 	@PostMapping("/albums")
@@ -71,8 +71,8 @@ public class AlbumController {
 	/**
 	 * Update Album response entity.
 	 *
-	 * @param AlbumId the Album id
-	 * @param AlbumDetails the Album details
+	 * @param albumId the Album id
+	 * @param albumDetails the Album details
 	 * @return the response entity
 	 * @throws ResourceNotFoundException the resource not found exception
 	 */
@@ -92,7 +92,7 @@ public class AlbumController {
 	/**
 	 * Delete Album map.
 	 *
-	 * @param AlbumId the Album id
+	 * @param albumId the Album id
 	 * @return the map
 	 * @throws Exception the exception
 	 */
