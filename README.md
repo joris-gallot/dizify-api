@@ -1,8 +1,8 @@
 # Dizify music API
 
-## Application properties
+### Application properties
 
-Create `application.properties` in `src/main/ressources` and copy/paste this :
+Create `application.properties` file in `src/main/ressources` and copy/paste this :
 
 ```
 ## Database Properties
