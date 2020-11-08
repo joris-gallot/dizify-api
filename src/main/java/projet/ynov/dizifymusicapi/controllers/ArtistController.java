@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -50,7 +51,7 @@ public class ArtistController {
 	public ResponseEntity<Artist> getArtistsById(@PathVariable(value = "id") Long artistId) throws ResourceNotFoundException {
 		Artist artist = artistRepository
 			  				.findById(artistId)
-	  						.orElseThrow(() -> new ResourceNotFoundException(HttpStatus.NOT_FOUND, "Artist not found on :: " + artistId));
+	  						.orElseThrow(() -> new ResourceNotFoundException(HttpStatus.NOT_FOUND, "Artist not found with id : " + artistId));
 	  
 		return ResponseEntity.ok().body(artist);
 	}
@@ -65,7 +66,12 @@ public class ArtistController {
 	public Artist createArtist(@Validated @RequestBody Artist artist) {
 		artist.setCreatedAt(new Date());
 		artist.setUpdatedAt(new Date());
-		return artistRepository.save(artist);
+		
+		try {
+			return artistRepository.save(artist);
+		} catch (DataIntegrityViolationException e) {
+			throw new DataIntegrityViolationException("Name already taken.");
+		}
 	}
 
 	/**
@@ -80,7 +86,7 @@ public class ArtistController {
 	public ResponseEntity<Artist> updateArtist(@PathVariable(value = "id") Long artistId, @Validated @RequestBody Artist artistDetails) throws ResourceNotFoundException {
 	    Artist artist = artistRepository
 	            			.findById(artistId)
-	            			.orElseThrow(() -> new ResourceNotFoundException(HttpStatus.NOT_FOUND, "Artist not found on :: " + artistId));
+	            			.orElseThrow(() -> new ResourceNotFoundException(HttpStatus.NOT_FOUND, "Artist not found with id : " + artistId));
 
 	    artist.setName(artistDetails.getName());
 	    artist.setImage(artistDetails.getImage());
@@ -101,7 +107,7 @@ public class ArtistController {
 	public Map<String, Boolean> deleteArtist(@PathVariable(value = "id") Long artistId) throws Exception {
 	    Artist artist = artistRepository
 	            			.findById(artistId)
-	            			.orElseThrow(() -> new ResourceNotFoundException(HttpStatus.NOT_FOUND, "Artist not found on :: " + artistId));
+	            			.orElseThrow(() -> new ResourceNotFoundException(HttpStatus.NOT_FOUND, "Artist not found with id : " + artistId));
 
 	    artistRepository.delete(artist);
 	    Map<String, Boolean> response = new HashMap<>();

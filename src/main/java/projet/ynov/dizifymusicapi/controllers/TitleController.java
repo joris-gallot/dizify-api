@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -60,7 +61,7 @@ public class TitleController {
 	public ResponseEntity<Title> getTitlesById(@PathVariable(value = "id") Long titleId) throws ResourceNotFoundException {
 		Title title = titleRepository
 			  				.findById(titleId)
-	  						.orElseThrow(() -> new ResourceNotFoundException(HttpStatus.NOT_FOUND, "Title not found on :: " + titleId));
+	  						.orElseThrow(() -> new ResourceNotFoundException(HttpStatus.NOT_FOUND, "Title not found with id : " + titleId));
 	  
 		return ResponseEntity.ok().body(title);
 	}
@@ -75,7 +76,7 @@ public class TitleController {
 	public Title createTitle(@Validated @RequestBody TitleParams params) {
 		Artist artist = artistRepository
   					.findById(params.getAuthor_id())
-					.orElseThrow(() -> new ResourceNotFoundException(HttpStatus.NOT_FOUND, "Artist not found on :: " + params.getAuthor_id()));
+					.orElseThrow(() -> new ResourceNotFoundException(HttpStatus.NOT_FOUND, "Artist not found with id : " + params.getAuthor_id()));
 		Album album;
 
 		try {
@@ -92,7 +93,11 @@ public class TitleController {
 		title.setAuthor(artist);
 		title.setAlbum(album);
 		
-		return titleRepository.save(title);
+		try {
+			return titleRepository.save(title);
+		} catch (DataIntegrityViolationException e) {
+			throw new DataIntegrityViolationException("Name already taken.");
+		}
 	}
 
 	/**
@@ -107,7 +112,7 @@ public class TitleController {
 	public ResponseEntity<Title> updateTitle(@PathVariable(value = "id") Long titleId, @Validated @RequestBody Title titleDetails) throws ResourceNotFoundException {
 	    Title title = titleRepository
 	            			.findById(titleId)
-	            			.orElseThrow(() -> new ResourceNotFoundException(HttpStatus.NOT_FOUND, "Title not found on :: " + titleId));
+	            			.orElseThrow(() -> new ResourceNotFoundException(HttpStatus.NOT_FOUND, "Title not found with id : " + titleId));
 
 	    title.setName(titleDetails.getName());
 	    title.setDuration(titleDetails.getDuration());
@@ -128,7 +133,7 @@ public class TitleController {
 	public Map<String, Boolean> deleteTitle(@PathVariable(value = "id") Long titleId) throws Exception {
 	    Title title = titleRepository
 	            			.findById(titleId)
-	            			.orElseThrow(() -> new ResourceNotFoundException(HttpStatus.NOT_FOUND, "Title not found on :: " + titleId));
+	            			.orElseThrow(() -> new ResourceNotFoundException(HttpStatus.NOT_FOUND, "Title not found with id : " + titleId));
 
 	    titleRepository.delete(title);
 	    Map<String, Boolean> response = new HashMap<>();
