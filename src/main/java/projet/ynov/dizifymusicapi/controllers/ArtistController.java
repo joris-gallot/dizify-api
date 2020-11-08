@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import projet.ynov.dizifymusicapi.entity.Artist;
+import projet.ynov.dizifymusicapi.entity.params.ArtistParams;
 import projet.ynov.dizifymusicapi.exceptions.ResourceNotFoundException;
 import projet.ynov.dizifymusicapi.repositories.ArtistRepository;
 
@@ -63,9 +64,15 @@ public class ArtistController {
 	 * @return the Artist
 	 */
 	@PostMapping("/artists")
-	public Artist createArtist(@Validated @RequestBody Artist artist) {
-		artist.setCreatedAt(new Date());
-		artist.setUpdatedAt(new Date());
+	public Artist createArtist(@Validated @RequestBody ArtistParams params) {
+		params.setCreatedAt(new Date());
+		params.setUpdatedAt(new Date());
+		
+		if (params.getImage() == null || params.getImage() == "") {
+			params.setImage("https://i.pravatar.cc/300");
+		}
+		
+		Artist artist = new Artist(params);
 		
 		try {
 			return artistRepository.save(artist);
