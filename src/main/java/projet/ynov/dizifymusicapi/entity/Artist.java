@@ -19,6 +19,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+import projet.ynov.dizifymusicapi.entity.params.ArtistParams;
 import projet.ynov.dizifymusicapi.serializers.ArtistSerializer;
 
 @Entity
@@ -50,6 +51,18 @@ public class Artist {
     @Column(name = "updated_at", nullable = false)
     @LastModifiedDate
     private Date updatedAt;
+    
+    public Artist() {
+    	super();
+    }
+    
+    public Artist(ArtistParams params) {
+		this.id = params.getId();
+		this.name = params.getName();
+		this.image = params.getImage();
+		this.createdAt = params.getCreatedAt();
+		this.updatedAt = params.getUpdatedAt();
+	}
 
 	public long getId() {
 		return id;

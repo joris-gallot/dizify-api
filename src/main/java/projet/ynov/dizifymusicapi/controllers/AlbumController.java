@@ -77,6 +77,10 @@ public class AlbumController {
 		params.setCreatedAt(new Date());
 		params.setUpdatedAt(new Date());
 		
+		if (params.getImage() == null || params.getImage() == "") {
+			params.setImage("https://picsum.photos/700/500");
+		}
+		
 		Album album = new Album(params);
 		album.setAuthor(artist);
 		
