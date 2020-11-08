@@ -19,8 +19,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import projet.ynov.dizifymusicapi.entity.Album;
+import projet.ynov.dizifymusicapi.entity.Artist;
+import projet.ynov.dizifymusicapi.entity.params.AlbumParams;
 import projet.ynov.dizifymusicapi.exceptions.ResourceNotFoundException;
 import projet.ynov.dizifymusicapi.repositories.AlbumRepository;
+import projet.ynov.dizifymusicapi.repositories.ArtistRepository;
 
 @RestController
 @RequestMapping("/api")
@@ -28,6 +31,8 @@ public class AlbumController {
 
 	@Autowired
 	private AlbumRepository albumRepository;
+	@Autowired
+	private ArtistRepository artistRepository;
 	
 	/**
 	 * Get all Album list.
@@ -40,7 +45,7 @@ public class AlbumController {
     }
 
 	/**
-	 * Gets lbums by id.
+	 * Gets album by id.
 	 *
 	 * @param albumId the Album id
 	 * @return the Albums by id
@@ -56,15 +61,24 @@ public class AlbumController {
 	}
 
 	/**
-	 * Create Album Album.
+	 * Create Album.
 	 *
-	 * @param album the Album
+	 * @param params the AlbumParams
 	 * @return the Album
 	 */
 	@PostMapping("/albums")
-	public Album createAlbum(@Validated @RequestBody Album album) {
-		album.setCreatedAt(new Date());
-		album.setUpdatedAt(new Date());
+	public Album createAlbum(@Validated @RequestBody AlbumParams params) {
+		Artist artist = artistRepository
+			  				.findById(params.getAuthor_id())
+	  						.orElseThrow(() -> new ResourceNotFoundException(HttpStatus.NOT_FOUND, "Artist not found on :: " + params.getAuthor_id()));
+		
+
+		params.setCreatedAt(new Date());
+		params.setUpdatedAt(new Date());
+		
+		Album album = new Album(params);
+		album.setAuthor(artist);
+		
 		return albumRepository.save(album);
 	}
 

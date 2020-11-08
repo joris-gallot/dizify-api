@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,8 +19,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import projet.ynov.dizifymusicapi.entity.Album;
+import projet.ynov.dizifymusicapi.entity.Artist;
 import projet.ynov.dizifymusicapi.entity.Title;
+import projet.ynov.dizifymusicapi.entity.params.TitleParams;
 import projet.ynov.dizifymusicapi.exceptions.ResourceNotFoundException;
+import projet.ynov.dizifymusicapi.repositories.AlbumRepository;
+import projet.ynov.dizifymusicapi.repositories.ArtistRepository;
 import projet.ynov.dizifymusicapi.repositories.TitleRepository;
 
 @RestController
@@ -28,6 +34,10 @@ public class TitleController {
 
 	@Autowired
 	private TitleRepository titleRepository;
+	@Autowired
+	private ArtistRepository artistRepository;
+	@Autowired
+	private AlbumRepository albumRepository;
 	
 	/**
 	 * Get all Title list.
@@ -58,13 +68,30 @@ public class TitleController {
 	/**
 	 * Create Title Title.
 	 *
-	 * @param title the Title
+	 * @param paramd TitleParams
 	 * @return the Title
 	 */
 	@PostMapping("/titles")
-	public Title createTitle(@Validated @RequestBody Title title) {
-		title.setCreatedAt(new Date());
-		title.setUpdatedAt(new Date());
+	public Title createTitle(@Validated @RequestBody TitleParams params) {
+		Artist artist = artistRepository
+  					.findById(params.getAuthor_id())
+					.orElseThrow(() -> new ResourceNotFoundException(HttpStatus.NOT_FOUND, "Artist not found on :: " + params.getAuthor_id()));
+		Album album;
+
+		try {
+			Optional<Album> optionalAlbum = albumRepository.findById(params.getAlbum_id());
+			album = optionalAlbum.get();
+        } catch (Exception e) {
+        	album = null;
+        }			
+
+		params.setCreatedAt(new Date());
+		params.setUpdatedAt(new Date());
+		
+		Title title = new Title(params);
+		title.setAuthor(artist);
+		title.setAlbum(album);
+		
 		return titleRepository.save(title);
 	}
 
