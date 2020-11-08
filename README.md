@@ -7,7 +7,7 @@ Create `application.properties` file in `src/main/ressources` and copy/paste thi
 ```
 ## Database Properties
 
-spring.datasource.url = jdbc:mysql://localhost:3306/bibliotheque_database?allowPublicKeyRetrieval=true&useSSL=false
+spring.datasource.url = jdbc:mysql://localhost:3306/dizifymusic?allowPublicKeyRetrieval=true&useSSL=false
 spring.datasource.username = username
 spring.datasource.password = password
 
