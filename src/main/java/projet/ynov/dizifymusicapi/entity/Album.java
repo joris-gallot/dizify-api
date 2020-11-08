@@ -33,7 +33,7 @@ public class Album {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 	
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", unique=true, nullable = false)
     private String name;
 
     @Column(name = "image", nullable = false)

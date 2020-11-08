@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -55,7 +56,7 @@ public class AlbumController {
 	public ResponseEntity<Album> getAlbumsById(@PathVariable(value = "id") Long albumId) throws ResourceNotFoundException {
 		Album album = albumRepository
 			  				.findById(albumId)
-	  						.orElseThrow(() -> new ResourceNotFoundException(HttpStatus.NOT_FOUND, "Album not found on :: " + albumId));
+	  						.orElseThrow(() -> new ResourceNotFoundException(HttpStatus.NOT_FOUND, "Album not found with id : " + albumId));
 	  
 		return ResponseEntity.ok().body(album);
 	}
@@ -70,7 +71,7 @@ public class AlbumController {
 	public Album createAlbum(@Validated @RequestBody AlbumParams params) {
 		Artist artist = artistRepository
 			  				.findById(params.getAuthor_id())
-	  						.orElseThrow(() -> new ResourceNotFoundException(HttpStatus.NOT_FOUND, "Artist not found on :: " + params.getAuthor_id()));
+	  						.orElseThrow(() -> new ResourceNotFoundException(HttpStatus.NOT_FOUND, "Artist not found with id : " + params.getAuthor_id()));
 		
 
 		params.setCreatedAt(new Date());
@@ -79,7 +80,11 @@ public class AlbumController {
 		Album album = new Album(params);
 		album.setAuthor(artist);
 		
-		return albumRepository.save(album);
+		try {
+			return albumRepository.save(album);
+		} catch (DataIntegrityViolationException e) {
+			throw new DataIntegrityViolationException("Name already taken.");
+		}
 	}
 
 	/**
@@ -94,7 +99,7 @@ public class AlbumController {
 	public ResponseEntity<Album> updateAlbum(@PathVariable(value = "id") Long albumId, @Validated @RequestBody Album albumDetails) throws ResourceNotFoundException {
 	    Album album = albumRepository
 	            			.findById(albumId)
-	            			.orElseThrow(() -> new ResourceNotFoundException(HttpStatus.NOT_FOUND, "Album not found on :: " + albumId));
+	            			.orElseThrow(() -> new ResourceNotFoundException(HttpStatus.NOT_FOUND, "Album not found with id : " + albumId));
 
 	    album.setName(albumDetails.getName());
 	    album.setImage(albumDetails.getImage());
@@ -114,7 +119,7 @@ public class AlbumController {
 	public Map<String, Boolean> deleteAlbum(@PathVariable(value = "id") Long albumId) throws Exception {
 	    Album album = albumRepository
 	            			.findById(albumId)
-	            			.orElseThrow(() -> new ResourceNotFoundException(HttpStatus.NOT_FOUND, "Album not found on :: " + albumId));
+	            			.orElseThrow(() -> new ResourceNotFoundException(HttpStatus.NOT_FOUND, "Album not found with id : " + albumId));
 
 	    albumRepository.delete(album);
 	    Map<String, Boolean> response = new HashMap<>();
