@@ -19,3 +19,7 @@ spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.MySQL5InnoDBDial
 
 spring.jpa.hibernate.ddl-auto = update
 ```
+
+### Start the server
+
+`$ mvn spring-boot:run`
