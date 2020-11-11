@@ -2,16 +2,13 @@ package projet.ynov.dizifymusicapi.entity.params;
 
 import java.util.Date;
 
-public class AlbumParams {
+public class PlaylistParams {
+
     private long id;
 	
     private String name;
 
-    private String image;
-    
-    private Date publicationDate;
-
-    private long author_id;
+    private long user_id;
 
     private Date createdAt;
 
@@ -33,20 +30,12 @@ public class AlbumParams {
 		this.name = name;
 	}
 
-	public String getImage() {
-		return image;
+	public long getUser_id() {
+		return user_id;
 	}
 
-	public void setImage(String image) {
-		this.image = image;
-	}
-
-	public Date getPublicationDate() {
-		return publicationDate;
-	}
-
-	public void setPublicationDate(Date publicationDate) {
-		this.publicationDate = publicationDate;
+	public void setUser_id(long user_id) {
+		this.user_id = user_id;
 	}
 
 	public Date getCreatedAt() {
@@ -64,13 +53,5 @@ public class AlbumParams {
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
 	}
-
-	public long getAuthor_id() {
-		return author_id;
-	}
-
-	public void setAuthor_id(long author_id) {
-		this.author_id = author_id;
-	}
-	    
+    
 }

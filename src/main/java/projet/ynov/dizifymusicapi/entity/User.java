@@ -1,17 +1,16 @@
 package projet.ynov.dizifymusicapi.entity;
 
-import java.sql.Time;
 import java.util.Date;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.springframework.data.annotation.CreatedDate;
@@ -20,31 +19,29 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-import projet.ynov.dizifymusicapi.entity.params.TitleParams;
-import projet.ynov.dizifymusicapi.serializers.TitleSerializer;
+import projet.ynov.dizifymusicapi.entity.params.UserParams;
+import projet.ynov.dizifymusicapi.serializers.UserSerializer;
 
 @Entity
-@Table(name = "titles")
+@Table(name = "users")
+@JsonSerialize(using = UserSerializer.class)
 @EntityListeners(AuditingEntityListener.class)
-@JsonSerialize(using = TitleSerializer.class)
-public class Title {
+public class User {
+
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    
-    @Column(name = "name", unique=true, nullable = false)
-    private String name;
+	
+    @Column(name = "email", unique=true, nullable = false)
+    private String email;
 
-    @Column(name = "duration", nullable = false)
-    private Time duration;
+    @Column(name = "image", nullable = false)
+    private String image;
+    
+    @Column(name = "username", nullable = false)
+    private String username;
 
-    @ManyToOne
-    private Album album;
-    
-    @ManyToOne
-    private Artist author;
-    
-    @ManyToMany(mappedBy="titles")
+    @OneToMany(mappedBy="user", cascade={CascadeType.ALL})
     private Set<Playlist> playlists;
 
     @Column(name = "created_at", nullable = false)
@@ -55,14 +52,15 @@ public class Title {
     @LastModifiedDate
     private Date updatedAt;
     
-    public Title() {
+    public User() {
     	super();
     }
     
-    public Title(TitleParams params) {
+    public User(UserParams params) {
 		this.id = params.getId();
-		this.name = params.getName();
-		this.duration = params.getDuration();
+		this.username = params.getUsername();
+		this.image = params.getImage();
+		this.email = params.getEmail();
 		this.createdAt = params.getCreatedAt();
 		this.updatedAt = params.getUpdatedAt();
 	}
@@ -75,20 +73,28 @@ public class Title {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
-	public Time getDuration() {
-		return duration;
+	public String getImage() {
+		return image;
 	}
 
-	public void setDuration(Time duration) {
-		this.duration = duration;
+	public void setImage(String image) {
+		this.image = image;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public Date getCreatedAt() {
@@ -107,20 +113,12 @@ public class Title {
 		this.updatedAt = updatedAt;
 	}
 
-	public Artist getAuthor() {
-		return author;
+	public Set<Playlist> getPlaylists() {
+		return playlists;
 	}
 
-	public void setAuthor(Artist author) {
-		this.author = author;
-	}
-
-	public Album getAlbum() {
-		return album;
-	}
-
-	public void setAlbum(Album album) {
-		this.album = album;
+	public void setPlaylists(Set<Playlist> playlists) {
+		this.playlists = playlists;
 	}
     
     

@@ -1,6 +1,5 @@
 package projet.ynov.dizifymusicapi.entity;
 
-import java.sql.Time;
 import java.util.Date;
 import java.util.Set;
 
@@ -20,32 +19,27 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-import projet.ynov.dizifymusicapi.entity.params.TitleParams;
-import projet.ynov.dizifymusicapi.serializers.TitleSerializer;
+import projet.ynov.dizifymusicapi.entity.params.PlaylistParams;
+import projet.ynov.dizifymusicapi.serializers.PlaylistSerializer;
 
 @Entity
-@Table(name = "titles")
+@Table(name = "playlists")
+@JsonSerialize(using = PlaylistSerializer.class)
 @EntityListeners(AuditingEntityListener.class)
-@JsonSerialize(using = TitleSerializer.class)
-public class Title {
+public class Playlist {
+
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    
-    @Column(name = "name", unique=true, nullable = false)
+	
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "duration", nullable = false)
-    private Time duration;
+    @ManyToMany
+    private Set<Title> titles;
 
-    @ManyToOne
-    private Album album;
-    
-    @ManyToOne
-    private Artist author;
-    
-    @ManyToMany(mappedBy="titles")
-    private Set<Playlist> playlists;
+	@ManyToOne
+    private User user;
 
     @Column(name = "created_at", nullable = false)
     @CreatedDate
@@ -55,14 +49,13 @@ public class Title {
     @LastModifiedDate
     private Date updatedAt;
     
-    public Title() {
+    public Playlist() {
     	super();
     }
     
-    public Title(TitleParams params) {
+    public Playlist(PlaylistParams params) {
 		this.id = params.getId();
 		this.name = params.getName();
-		this.duration = params.getDuration();
 		this.createdAt = params.getCreatedAt();
 		this.updatedAt = params.getUpdatedAt();
 	}
@@ -83,12 +76,20 @@ public class Title {
 		this.name = name;
 	}
 
-	public Time getDuration() {
-		return duration;
+	public Set<Title> getTitles() {
+		return titles;
 	}
 
-	public void setDuration(Time duration) {
-		this.duration = duration;
+	public void setTitles(Set<Title> titles) {
+		this.titles = titles;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public Date getCreatedAt() {
@@ -106,22 +107,6 @@ public class Title {
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
 	}
-
-	public Artist getAuthor() {
-		return author;
-	}
-
-	public void setAuthor(Artist author) {
-		this.author = author;
-	}
-
-	public Album getAlbum() {
-		return album;
-	}
-
-	public void setAlbum(Album album) {
-		this.album = album;
-	}
     
-    
+
 }
