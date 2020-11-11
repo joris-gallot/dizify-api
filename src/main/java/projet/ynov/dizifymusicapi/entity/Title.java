@@ -122,6 +122,12 @@ public class Title {
 	public void setAlbum(Album album) {
 		this.album = album;
 	}
+
+	@Override
+	public String toString() {
+		return "Title [id=" + id + ", name=" + name + ", duration=" + duration + ", album=" + album + ", author="
+				+ author + ", playlists=" + playlists + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + "]";
+	}
     
     
 }

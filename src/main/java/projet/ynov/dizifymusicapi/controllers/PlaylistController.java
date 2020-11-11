@@ -1,9 +1,13 @@
 package projet.ynov.dizifymusicapi.controllers;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,10 +23,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import projet.ynov.dizifymusicapi.entity.Playlist;
+import projet.ynov.dizifymusicapi.entity.Title;
 import projet.ynov.dizifymusicapi.entity.User;
 import projet.ynov.dizifymusicapi.entity.params.PlaylistParams;
 import projet.ynov.dizifymusicapi.exceptions.ResourceNotFoundException;
 import projet.ynov.dizifymusicapi.repositories.PlaylistRepository;
+import projet.ynov.dizifymusicapi.repositories.TitleRepository;
 import projet.ynov.dizifymusicapi.repositories.UserRepository;
 
 @RestController
@@ -33,6 +39,8 @@ public class PlaylistController {
 	private PlaylistRepository playlistRepository;
 	@Autowired
 	private UserRepository userRepository;
+	@Autowired
+	private TitleRepository titleRepository;
 	
 	/**
 	 * Get all Playlist list.
@@ -90,7 +98,8 @@ public class PlaylistController {
 	 * @throws ResourceNotFoundException the resource not found exception
 	 */
 	@PutMapping("/playlists/{id}")
-	public ResponseEntity<Playlist> updatePlaylist(@PathVariable(value = "id") Long playlistId, @RequestBody PlaylistParams playlistDetails) throws ResourceNotFoundException {
+	public ResponseEntity<Playlist> updatePlaylist(@PathVariable(value = "id") Long playlistId, @RequestBody PlaylistParams playlistDetails)
+			throws ResourceNotFoundException {
 	    Playlist playlist = playlistRepository
 	            			.findById(playlistId)
 	            			.orElseThrow(() -> new ResourceNotFoundException(HttpStatus.NOT_FOUND, "Playlist not found with id : " + playlistId));
@@ -99,10 +108,16 @@ public class PlaylistController {
 	    	playlist.setName(playlistDetails.getName());
 	    }
 	    
+	    if (playlistDetails.getTitle_ids() != null) {
+	    	List<Title> titles = titleRepository.findAllById(playlistDetails.getTitle_ids());
+	    	playlist.setTitles(new HashSet<Title>(titles));
+	    }
+	    
 	    playlist.setUpdatedAt(new Date());
 	    final Playlist updatedPlaylist = playlistRepository.save(playlist);
 	    return ResponseEntity.ok(updatedPlaylist);
 	}
+	
 
 	/**
 	 * Delete Playlist map.

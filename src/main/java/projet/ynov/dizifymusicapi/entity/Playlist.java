@@ -107,6 +107,12 @@ public class Playlist {
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
 	}
-    
 
+	@Override
+	public String toString() {
+		return "Playlist [id=" + id + ", name=" + name + ", titles=" + titles + ", user=" + user + ", createdAt="
+				+ createdAt + ", updatedAt=" + updatedAt + "]";
+	}
+    
+	
 }

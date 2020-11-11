@@ -10,6 +10,8 @@ public class PlaylistParams {
 
     private long user_id;
 
+    private Iterable<Long> title_ids;
+
     private Date createdAt;
 
     private Date updatedAt;
@@ -52,6 +54,14 @@ public class PlaylistParams {
 
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
+	}
+
+	public Iterable<Long> getTitle_ids() {
+		return title_ids;
+	}
+
+	public void setTitle_ids(Iterable<Long> title_ids) {
+		this.title_ids = title_ids;
 	}
     
 }
