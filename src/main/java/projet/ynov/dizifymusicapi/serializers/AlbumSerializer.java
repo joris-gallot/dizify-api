@@ -1,6 +1,8 @@
 package projet.ynov.dizifymusicapi.serializers;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.TimeZone;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -28,13 +30,17 @@ public class AlbumSerializer extends StdSerializer<Album> {
  
     @Override
     public void serialize(Album album, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonProcessingException {
+		SimpleDateFormat sdf;
+		sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
+		sdf.setTimeZone(TimeZone.getTimeZone("CET"));
+		
         jgen.writeStartObject();
         jgen.writeNumberField("id", album.getId());
         jgen.writeStringField("name", album.getName());
         jgen.writeStringField("image", album.getImage());
         jgen.writeStringField("publicationDate", album.getPublicationDate().toString());
-        jgen.writeStringField("updatedAt", album.getUpdatedAt().toString());
-        jgen.writeStringField("createdAt", album.getCreatedAt().toString());
+        jgen.writeStringField("updatedAt", sdf.format(album.getUpdatedAt()));
+        jgen.writeStringField("createdAt", sdf.format(album.getCreatedAt()));
         
     	// Set list of titles
 		jgen.writeFieldName("titles");
@@ -45,8 +51,8 @@ public class AlbumSerializer extends StdSerializer<Album> {
 	            jgen.writeNumberField("id", title.getId());
 	            jgen.writeStringField("name", title.getName());
 	            jgen.writeStringField("duration", title.getDuration().toString());
-	            jgen.writeStringField("updatedAt", title.getUpdatedAt().toString());
-	            jgen.writeStringField("createdAt", title.getCreatedAt().toString());
+	            jgen.writeStringField("updatedAt", sdf.format(title.getUpdatedAt()));
+	            jgen.writeStringField("createdAt", sdf.format(title.getCreatedAt()));
 	            jgen.writeEndObject();
 	        }
     	}
@@ -58,8 +64,8 @@ public class AlbumSerializer extends StdSerializer<Album> {
     	jgen.writeStartObject();
         jgen.writeNumberField("id", author.getId());
         jgen.writeStringField("name", author.getName());
-        jgen.writeStringField("updatedAt", author.getUpdatedAt().toString());
-        jgen.writeStringField("createdAt", author.getCreatedAt().toString());
+        jgen.writeStringField("updatedAt", sdf.format(author.getUpdatedAt()));
+        jgen.writeStringField("createdAt", sdf.format(author.getCreatedAt()));
         jgen.writeEndObject();
         
     	jgen.writeEndObject();
