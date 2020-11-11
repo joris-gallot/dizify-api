@@ -8,7 +8,7 @@ public class PlaylistParams {
 	
     private String name;
 
-    private long user_id;
+    private long user_id; // to delete with auth
 
     private Iterable<Long> title_ids;
 

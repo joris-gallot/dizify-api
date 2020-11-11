@@ -119,7 +119,7 @@ public class AlbumController {
 	 * @return the map
 	 * @throws Exception the exception
 	 */
-	@DeleteMapping("/album/{id}")
+	@DeleteMapping("/albums/{id}")
 	public Map<String, Boolean> deleteAlbum(@PathVariable(value = "id") Long albumId) throws Exception {
 	    Album album = albumRepository
 	            			.findById(albumId)
