@@ -129,7 +129,7 @@ public class TitleController {
 	 * @return the map
 	 * @throws Exception the exception
 	 */
-	@DeleteMapping("/title/{id}")
+	@DeleteMapping("/titles/{id}")
 	public Map<String, Boolean> deleteTitle(@PathVariable(value = "id") Long titleId) throws Exception {
 	    Title title = titleRepository
 	            			.findById(titleId)

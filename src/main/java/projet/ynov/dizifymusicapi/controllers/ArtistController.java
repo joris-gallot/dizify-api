@@ -110,7 +110,7 @@ public class ArtistController {
 	 * @return the map
 	 * @throws Exception the exception
 	 */
-	@DeleteMapping("/artist/{id}")
+	@DeleteMapping("/artists/{id}")
 	public Map<String, Boolean> deleteArtist(@PathVariable(value = "id") Long artistId) throws Exception {
 	    Artist artist = artistRepository
 	            			.findById(artistId)
