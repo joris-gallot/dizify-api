@@ -41,7 +41,7 @@ public class Artist {
     @OneToMany(mappedBy="author", cascade={CascadeType.ALL})
     private Set<Title> titles;
     
-    @OneToMany(mappedBy="author", cascade=CascadeType.ALL)
+    @OneToMany(mappedBy="author", cascade={CascadeType.ALL})
     private Set<Album> albums;
     
     @Column(name = "created_at", nullable = false)

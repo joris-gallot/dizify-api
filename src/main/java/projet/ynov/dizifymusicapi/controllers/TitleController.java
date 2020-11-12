@@ -109,14 +109,19 @@ public class TitleController {
 	 * @throws ResourceNotFoundException the resource not found exception
 	 */
 	@PutMapping("/titles/{id}")
-	public ResponseEntity<Title> updateTitle(@PathVariable(value = "id") Long titleId, @Validated @RequestBody Title titleDetails) throws ResourceNotFoundException {
+	public ResponseEntity<Title> updateTitle(@PathVariable(value = "id") Long titleId, @Validated @RequestBody TitleParams titleDetails) throws ResourceNotFoundException {
 	    Title title = titleRepository
 	            			.findById(titleId)
 	            			.orElseThrow(() -> new ResourceNotFoundException(HttpStatus.NOT_FOUND, "Title not found with id : " + titleId));
+	    
+	    if (titleDetails.getName() != null) {
+	    	titleDetails.setName(titleDetails.getName());
+	    }
+	    
+	    if (titleDetails.getDuration() != null) {
+	    	titleDetails.setDuration(titleDetails.getDuration());
+	    }
 
-	    title.setName(titleDetails.getName());
-	    title.setDuration(titleDetails.getDuration());
-	    title.setCreatedAt(titleDetails.getCreatedAt());
 	    title.setUpdatedAt(new Date());
 	    final Title updatedTitle = titleRepository.save(title);
 	    return ResponseEntity.ok(updatedTitle);

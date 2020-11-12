@@ -2,6 +2,7 @@ package projet.ynov.dizifymusicapi.controllers;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -21,10 +22,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import projet.ynov.dizifymusicapi.entity.Album;
 import projet.ynov.dizifymusicapi.entity.Artist;
+import projet.ynov.dizifymusicapi.entity.Title;
 import projet.ynov.dizifymusicapi.entity.params.AlbumParams;
 import projet.ynov.dizifymusicapi.exceptions.ResourceNotFoundException;
 import projet.ynov.dizifymusicapi.repositories.AlbumRepository;
 import projet.ynov.dizifymusicapi.repositories.ArtistRepository;
+import projet.ynov.dizifymusicapi.repositories.TitleRepository;
 
 @RestController
 @RequestMapping("/api")
@@ -34,6 +37,8 @@ public class AlbumController {
 	private AlbumRepository albumRepository;
 	@Autowired
 	private ArtistRepository artistRepository;
+	@Autowired
+	private TitleRepository titleRepository;
 	
 	/**
 	 * Get all Album list.
@@ -72,7 +77,6 @@ public class AlbumController {
 		Artist artist = artistRepository
 			  				.findById(params.getAuthor_id())
 	  						.orElseThrow(() -> new ResourceNotFoundException(HttpStatus.NOT_FOUND, "Artist not found with id : " + params.getAuthor_id()));
-		
 
 		params.setCreatedAt(new Date());
 		params.setUpdatedAt(new Date());
@@ -83,6 +87,14 @@ public class AlbumController {
 		
 		Album album = new Album(params);
 		album.setAuthor(artist);
+		
+		if (params.getTitle_ids() != null) {
+	    	List<Title> titles = titleRepository.findAllById(params.getTitle_ids());
+	    	for (Title title : titles) {
+	    		title.setAlbum(album);
+	    	}
+	    	album.setTitles(new HashSet<Title>(titles));
+	    }
 		
 		try {
 			return albumRepository.save(album);
@@ -100,13 +112,27 @@ public class AlbumController {
 	 * @throws ResourceNotFoundException the resource not found exception
 	 */
 	@PutMapping("/albums/{id}")
-	public ResponseEntity<Album> updateAlbum(@PathVariable(value = "id") Long albumId, @Validated @RequestBody Album albumDetails) throws ResourceNotFoundException {
+	public ResponseEntity<Album> updateAlbum(@PathVariable(value = "id") Long albumId, @Validated @RequestBody AlbumParams albumDetails) throws ResourceNotFoundException {
 	    Album album = albumRepository
 	            			.findById(albumId)
 	            			.orElseThrow(() -> new ResourceNotFoundException(HttpStatus.NOT_FOUND, "Album not found with id : " + albumId));
+	    
+	    if (albumDetails.getTitle_ids() != null) {
+	    	List<Title> titles = titleRepository.findAllById(albumDetails.getTitle_ids());
+	    	for (Title title : titles) {
+	    		title.setAlbum(album);
+	    	}
+	    	album.setTitles(new HashSet<Title>(titles));
+	    }
+	    
+	    if (albumDetails.getImage() != null) {
+		    album.setImage(albumDetails.getImage());
+		}
+	    
+	    if (albumDetails.getName() != null) {
+		    album.setName(albumDetails.getName());
+		}
 
-	    album.setName(albumDetails.getName());
-	    album.setImage(albumDetails.getImage());
 	    album.setUpdatedAt(new Date());
 	    final Album updatedAlbum = albumRepository.save(album);
 	    return ResponseEntity.ok(updatedAlbum);

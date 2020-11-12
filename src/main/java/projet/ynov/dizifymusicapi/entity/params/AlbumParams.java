@@ -13,6 +13,8 @@ public class AlbumParams {
 
     private long author_id;
 
+    private Iterable<Long> title_ids;
+
     private Date createdAt;
 
     private Date updatedAt;
@@ -71,6 +73,14 @@ public class AlbumParams {
 
 	public void setAuthor_id(long author_id) {
 		this.author_id = author_id;
+	}
+
+	public Iterable<Long> getTitle_ids() {
+		return title_ids;
+	}
+
+	public void setTitle_ids(Iterable<Long> title_ids) {
+		this.title_ids = title_ids;
 	}
 	    
 }
