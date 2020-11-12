@@ -90,14 +90,19 @@ public class ArtistController {
 	 * @throws ResourceNotFoundException the resource not found exception
 	 */
 	@PutMapping("/artists/{id}")
-	public ResponseEntity<Artist> updateArtist(@PathVariable(value = "id") Long artistId, @Validated @RequestBody Artist artistDetails) throws ResourceNotFoundException {
+	public ResponseEntity<Artist> updateArtist(@PathVariable(value = "id") Long artistId, @Validated @RequestBody ArtistParams artistDetails) throws ResourceNotFoundException {
 	    Artist artist = artistRepository
 	            			.findById(artistId)
 	            			.orElseThrow(() -> new ResourceNotFoundException(HttpStatus.NOT_FOUND, "Artist not found with id : " + artistId));
+	    
+	    if (artistDetails.getName() != null) {
+	    	artist.setName(artistDetails.getName());	    	
+	    }
+	    
+	    if (artistDetails.getImage() != null) {
+	    	artist.setImage(artistDetails.getImage());	    	
+	    }
 
-	    artist.setName(artistDetails.getName());
-	    artist.setImage(artistDetails.getImage());
-	    artist.setCreatedAt(artistDetails.getCreatedAt());
 	    artist.setUpdatedAt(new Date());
 	    final Artist updatedArtist = artistRepository.save(artist);
 	    return ResponseEntity.ok(updatedArtist);

@@ -83,6 +83,11 @@ public class PlaylistController {
 		Playlist playlist = new Playlist(params);
 		playlist.setUser(user);
 		
+		if (params.getTitle_ids() != null) {
+	    	List<Title> titles = titleRepository.findAllById(params.getTitle_ids());
+	    	playlist.setTitles(new HashSet<Title>(titles));
+	    }
+		
 		return playlistRepository.save(playlist);
 	}
 
