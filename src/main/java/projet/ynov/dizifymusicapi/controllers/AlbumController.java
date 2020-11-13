@@ -82,7 +82,7 @@ public class AlbumController {
 		params.setUpdatedAt(new Date());
 		
 		if (params.getImage() == null || params.getImage() == "") {
-			params.setImage("https://picsum.photos/700/500");
+			params.setImage("https://picsum.photos/200");
 		}
 		
 		Album album = new Album(params);
