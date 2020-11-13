@@ -2,7 +2,7 @@
 
 ### Application properties
 
-Create `application.properties` file in `src/main/ressources` and copy/paste this :
+Create `application.properties` file in `src/main/resources` and copy/paste this :
 
 ```
 ## Database Properties
