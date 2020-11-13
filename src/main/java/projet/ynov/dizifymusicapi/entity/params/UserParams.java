@@ -12,6 +12,8 @@ public class UserParams {
     private String email;
     
     private String username;
+    
+    private String password;
 
     private Date createdAt;
 
@@ -77,6 +79,14 @@ public class UserParams {
 	public String toString() {
 		return "UserParams [id=" + id + ", name=" + name + ", image=" + image + ", email=" + email + ", username="
 				+ username + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + "]";
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
     

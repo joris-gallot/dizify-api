@@ -24,7 +24,7 @@ import projet.ynov.dizifymusicapi.entity.Album;
 import projet.ynov.dizifymusicapi.entity.Artist;
 import projet.ynov.dizifymusicapi.entity.Title;
 import projet.ynov.dizifymusicapi.entity.params.TitleParams;
-import projet.ynov.dizifymusicapi.exceptions.ResourceNotFoundException;
+import projet.ynov.dizifymusicapi.exceptions.GlobalHttpException;
 import projet.ynov.dizifymusicapi.repositories.AlbumRepository;
 import projet.ynov.dizifymusicapi.repositories.ArtistRepository;
 import projet.ynov.dizifymusicapi.repositories.TitleRepository;
@@ -55,13 +55,13 @@ public class TitleController {
 	 *
 	 * @param titleId the Title id
 	 * @return the Titles by id
-	 * @throws ResourceNotFoundException the resource not found exception
+	 * @throws GlobalHttpException the resource not found exception
 	 */
 	@GetMapping("/titles/{id}")
-	public ResponseEntity<Title> getTitlesById(@PathVariable(value = "id") Long titleId) throws ResourceNotFoundException {
+	public ResponseEntity<Title> getTitlesById(@PathVariable(value = "id") Long titleId) throws GlobalHttpException {
 		Title title = titleRepository
 			  				.findById(titleId)
-	  						.orElseThrow(() -> new ResourceNotFoundException(HttpStatus.NOT_FOUND, "Title not found with id : " + titleId));
+	  						.orElseThrow(() -> new GlobalHttpException(HttpStatus.NOT_FOUND, "Title not found with id : " + titleId));
 	  
 		return ResponseEntity.ok().body(title);
 	}
@@ -76,7 +76,7 @@ public class TitleController {
 	public Title createTitle(@Validated @RequestBody TitleParams params) {
 		Artist artist = artistRepository
   					.findById(params.getAuthor_id())
-					.orElseThrow(() -> new ResourceNotFoundException(HttpStatus.NOT_FOUND, "Artist not found with id : " + params.getAuthor_id()));
+					.orElseThrow(() -> new GlobalHttpException(HttpStatus.NOT_FOUND, "Artist not found with id : " + params.getAuthor_id()));
 		Album album;
 
 		try {
@@ -106,13 +106,13 @@ public class TitleController {
 	 * @param TitleId the Title id
 	 * @param TitleDetails the Title details
 	 * @return the response entity
-	 * @throws ResourceNotFoundException the resource not found exception
+	 * @throws GlobalHttpException the resource not found exception
 	 */
 	@PutMapping("/titles/{id}")
-	public ResponseEntity<Title> updateTitle(@PathVariable(value = "id") Long titleId, @Validated @RequestBody TitleParams titleDetails) throws ResourceNotFoundException {
+	public ResponseEntity<Title> updateTitle(@PathVariable(value = "id") Long titleId, @Validated @RequestBody TitleParams titleDetails) throws GlobalHttpException {
 	    Title title = titleRepository
 	            			.findById(titleId)
-	            			.orElseThrow(() -> new ResourceNotFoundException(HttpStatus.NOT_FOUND, "Title not found with id : " + titleId));
+	            			.orElseThrow(() -> new GlobalHttpException(HttpStatus.NOT_FOUND, "Title not found with id : " + titleId));
 	    
 	    if (titleDetails.getName() != null) {
 	    	titleDetails.setName(titleDetails.getName());
@@ -138,7 +138,7 @@ public class TitleController {
 	public Map<String, Boolean> deleteTitle(@PathVariable(value = "id") Long titleId) throws Exception {
 	    Title title = titleRepository
 	            			.findById(titleId)
-	            			.orElseThrow(() -> new ResourceNotFoundException(HttpStatus.NOT_FOUND, "Title not found with id : " + titleId));
+	            			.orElseThrow(() -> new GlobalHttpException(HttpStatus.NOT_FOUND, "Title not found with id : " + titleId));
 
 	    titleRepository.delete(title);
 	    Map<String, Boolean> response = new HashMap<>();

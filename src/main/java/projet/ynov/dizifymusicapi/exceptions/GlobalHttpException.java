@@ -5,14 +5,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 @ResponseStatus(value = HttpStatus.NOT_FOUND)
-public class ResourceNotFoundException extends ResponseStatusException {
+public class GlobalHttpException extends ResponseStatusException {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public ResourceNotFoundException(HttpStatus status, String reason) {
+	public GlobalHttpException(HttpStatus status, String reason) {
 		super(status, reason);
 		// TODO Auto-generated constructor stub
 	}

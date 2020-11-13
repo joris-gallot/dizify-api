@@ -24,7 +24,7 @@ import projet.ynov.dizifymusicapi.entity.Album;
 import projet.ynov.dizifymusicapi.entity.Artist;
 import projet.ynov.dizifymusicapi.entity.Title;
 import projet.ynov.dizifymusicapi.entity.params.AlbumParams;
-import projet.ynov.dizifymusicapi.exceptions.ResourceNotFoundException;
+import projet.ynov.dizifymusicapi.exceptions.GlobalHttpException;
 import projet.ynov.dizifymusicapi.repositories.AlbumRepository;
 import projet.ynov.dizifymusicapi.repositories.ArtistRepository;
 import projet.ynov.dizifymusicapi.repositories.TitleRepository;
@@ -55,13 +55,13 @@ public class AlbumController {
 	 *
 	 * @param albumId the Album id
 	 * @return the Albums by id
-	 * @throws ResourceNotFoundException the resource not found exception
+	 * @throws GlobalHttpException the resource not found exception
 	 */
 	@GetMapping("/albums/{id}")
-	public ResponseEntity<Album> getAlbumsById(@PathVariable(value = "id") Long albumId) throws ResourceNotFoundException {
+	public ResponseEntity<Album> getAlbumsById(@PathVariable(value = "id") Long albumId) throws GlobalHttpException {
 		Album album = albumRepository
 			  				.findById(albumId)
-	  						.orElseThrow(() -> new ResourceNotFoundException(HttpStatus.NOT_FOUND, "Album not found with id : " + albumId));
+	  						.orElseThrow(() -> new GlobalHttpException(HttpStatus.NOT_FOUND, "Album not found with id : " + albumId));
 	  
 		return ResponseEntity.ok().body(album);
 	}
@@ -76,7 +76,7 @@ public class AlbumController {
 	public Album createAlbum(@Validated @RequestBody AlbumParams params) {
 		Artist artist = artistRepository
 			  				.findById(params.getAuthor_id())
-	  						.orElseThrow(() -> new ResourceNotFoundException(HttpStatus.NOT_FOUND, "Artist not found with id : " + params.getAuthor_id()));
+	  						.orElseThrow(() -> new GlobalHttpException(HttpStatus.NOT_FOUND, "Artist not found with id : " + params.getAuthor_id()));
 
 		params.setCreatedAt(new Date());
 		params.setUpdatedAt(new Date());
@@ -109,13 +109,13 @@ public class AlbumController {
 	 * @param albumId the Album id
 	 * @param albumDetails the Album details
 	 * @return the response entity
-	 * @throws ResourceNotFoundException the resource not found exception
+	 * @throws GlobalHttpException the resource not found exception
 	 */
 	@PutMapping("/albums/{id}")
-	public ResponseEntity<Album> updateAlbum(@PathVariable(value = "id") Long albumId, @Validated @RequestBody AlbumParams albumDetails) throws ResourceNotFoundException {
+	public ResponseEntity<Album> updateAlbum(@PathVariable(value = "id") Long albumId, @Validated @RequestBody AlbumParams albumDetails) throws GlobalHttpException {
 	    Album album = albumRepository
 	            			.findById(albumId)
-	            			.orElseThrow(() -> new ResourceNotFoundException(HttpStatus.NOT_FOUND, "Album not found with id : " + albumId));
+	            			.orElseThrow(() -> new GlobalHttpException(HttpStatus.NOT_FOUND, "Album not found with id : " + albumId));
 	    
 	    if (albumDetails.getTitle_ids() != null) {
 	    	List<Title> titles = titleRepository.findAllById(albumDetails.getTitle_ids());
@@ -149,7 +149,7 @@ public class AlbumController {
 	public Map<String, Boolean> deleteAlbum(@PathVariable(value = "id") Long albumId) throws Exception {
 	    Album album = albumRepository
 	            			.findById(albumId)
-	            			.orElseThrow(() -> new ResourceNotFoundException(HttpStatus.NOT_FOUND, "Album not found with id : " + albumId));
+	            			.orElseThrow(() -> new GlobalHttpException(HttpStatus.NOT_FOUND, "Album not found with id : " + albumId));
 
 	    albumRepository.delete(album);
 	    Map<String, Boolean> response = new HashMap<>();

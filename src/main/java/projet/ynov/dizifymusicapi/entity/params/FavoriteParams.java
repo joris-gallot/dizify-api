@@ -5,8 +5,6 @@ import java.util.Date;
 public class FavoriteParams {
     private long id;
     
-    private long user_id; //to delete with auth
-    
     private long album_id;
     private long title_id;
     private long artist_id;
@@ -39,14 +37,6 @@ public class FavoriteParams {
 		this.updatedAt = updatedAt;
 	}
 
-	public long getUser_id() {
-		return user_id;
-	}
-
-	public void setUser_id(long user_id) {
-		this.user_id = user_id;
-	}
-
 	public long getAlbum_id() {
 		return album_id;
 	}
@@ -73,7 +63,7 @@ public class FavoriteParams {
 
 	@Override
 	public String toString() {
-		return "FavoriteParams [id=" + id + ", user_id=" + user_id + ", album_id=" + album_id + ", title_id=" + title_id
+		return "FavoriteParams [id=" + id + ", album_id=" + album_id + ", title_id=" + title_id
 				+ ", artist_id=" + artist_id + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + "]";
 	}
 	

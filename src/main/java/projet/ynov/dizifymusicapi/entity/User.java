@@ -15,8 +15,10 @@ import javax.persistence.Table;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import projet.ynov.dizifymusicapi.entity.params.UserParams;
@@ -37,12 +39,18 @@ public class User {
 
     @Column(name = "image", nullable = false)
     private String image;
+
+    @Column(name = "password", nullable = false)
+    private String password;
     
-    @Column(name = "username", nullable = false)
+    @Column(name = "username", unique=true, nullable = false)
     private String username;
 
     @OneToMany(mappedBy="user", cascade={CascadeType.ALL})
     private Set<Playlist> playlists;
+    
+    @OneToMany(mappedBy="user", cascade={CascadeType.ALL})
+    private Set<Favorite> favorites;
 
     @Column(name = "created_at", nullable = false)
     @CreatedDate
@@ -52,6 +60,10 @@ public class User {
     @LastModifiedDate
     private Date updatedAt;
     
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @Transient
+    private String token;
+    
     public User() {
     	super();
     }
@@ -60,6 +72,7 @@ public class User {
 		this.id = params.getId();
 		this.username = params.getUsername();
 		this.image = params.getImage();
+		this.password = params.getPassword();
 		this.email = params.getEmail();
 		this.createdAt = params.getCreatedAt();
 		this.updatedAt = params.getUpdatedAt();
@@ -120,6 +133,31 @@ public class User {
 	public void setPlaylists(Set<Playlist> playlists) {
 		this.playlists = playlists;
 	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
+	public Set<Favorite> getFavorites() {
+		return favorites;
+	}
+
+	public void setFavorites(Set<Favorite> favorites) {
+		this.favorites = favorites;
+	}
     
+	
     
 }

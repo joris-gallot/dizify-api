@@ -11,7 +11,6 @@ import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 
 import projet.ynov.dizifymusicapi.entity.Playlist;
 import projet.ynov.dizifymusicapi.entity.Title;
-import projet.ynov.dizifymusicapi.entity.User;
 
 public class PlaylistSerializer extends StdSerializer<Playlist> {
     
@@ -36,20 +35,9 @@ public class PlaylistSerializer extends StdSerializer<Playlist> {
 		
         jgen.writeStartObject();
         jgen.writeNumberField("id", playlist.getId());
-        jgen.writeStringField("username", playlist.getName());
+        jgen.writeStringField("name", playlist.getName());
         jgen.writeStringField("updatedAt", sdf.format(playlist.getUpdatedAt()));
         jgen.writeStringField("createdAt", sdf.format(playlist.getCreatedAt()));
-        
-    	// Set user
-        User user = playlist.getUser();
-    	jgen.writeFieldName("user");
-    	jgen.writeStartObject();
-        jgen.writeNumberField("id", user.getId());
-        jgen.writeStringField("name", user.getUsername());
-        jgen.writeStringField("email", user.getEmail());
-        jgen.writeStringField("updatedAt", sdf.format(user.getUpdatedAt()));
-        jgen.writeStringField("createdAt", sdf.format(user.getCreatedAt()));
-        jgen.writeEndObject();
 
 	    // Set list of titles
 	    jgen.writeFieldName("titles");
