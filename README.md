@@ -20,6 +20,10 @@ spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.MySQL5InnoDBDial
 spring.jpa.hibernate.ddl-auto = update
 ```
 
+### Init db
+
+To have some data, you can init your database with `init.sql`
+
 ### Start the server
 
 `$ mvn spring-boot:run`

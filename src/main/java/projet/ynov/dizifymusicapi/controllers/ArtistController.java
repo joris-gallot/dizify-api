@@ -69,7 +69,7 @@ public class ArtistController {
 		params.setUpdatedAt(new Date());
 		
 		if (params.getImage() == null || params.getImage() == "") {
-			params.setImage("https://i.pravatar.cc/300");
+			params.setImage("https://i.pravatar.cc/200");
 		}
 		
 		Artist artist = new Artist(params);

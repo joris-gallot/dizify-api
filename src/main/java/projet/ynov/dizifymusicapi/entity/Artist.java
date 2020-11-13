@@ -10,6 +10,7 @@ import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -38,6 +39,7 @@ public class Artist {
     @Column(name = "image", nullable = false)
     private String image;
     
+    @Lob
     @Column(name = "description", nullable = false)
     private String description;
     
