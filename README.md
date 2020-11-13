@@ -7,7 +7,7 @@ Create `application.properties` file in `src/main/resources` and copy/paste this
 ```
 ## Database Properties
 
-spring.datasource.url = jdbc:mysql://localhost:3306/dizifymusic?allowPublicKeyRetrieval=true&useSSL=false
+spring.datasource.url = jdbc:mysql://localhost:3306/dizifymusic?allowPublicKeyRetrieval=true&useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
 spring.datasource.username = username
 spring.datasource.password = password
 
