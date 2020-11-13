@@ -9,6 +9,8 @@ public class ArtistParams {
 
     private String image;
     
+    private String description;
+    
     private Date createdAt;
     
     private Date updatedAt;
@@ -51,6 +53,14 @@ public class ArtistParams {
 
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
     
 }

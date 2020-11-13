@@ -102,6 +102,10 @@ public class ArtistController {
 	    if (artistDetails.getImage() != null) {
 	    	artist.setImage(artistDetails.getImage());	    	
 	    }
+	    
+	    if (artistDetails.getDescription() != null) {
+	    	artist.setDescription(artistDetails.getDescription());	    	
+	    }
 
 	    artist.setUpdatedAt(new Date());
 	    final Artist updatedArtist = artistRepository.save(artist);

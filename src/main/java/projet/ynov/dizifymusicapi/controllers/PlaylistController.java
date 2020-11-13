@@ -1,6 +1,5 @@
 package projet.ynov.dizifymusicapi.controllers;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -61,8 +60,8 @@ public class PlaylistController {
 	 * @return the list
 	 */
 	@GetMapping("/playlists")
-	public List<Playlist> getAllPlaylists() {
-		return new ArrayList<Playlist>(getUserLogged().getPlaylists());
+	public List<Playlist> getAllPlaylists() {		
+		return playlistRepository.findAllByUser(getUserLogged());
     }
 
 	/**

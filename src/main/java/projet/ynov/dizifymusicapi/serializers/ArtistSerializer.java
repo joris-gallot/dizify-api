@@ -38,6 +38,7 @@ public class ArtistSerializer extends StdSerializer<Artist> {
         jgen.writeNumberField("id", artist.getId());
         jgen.writeStringField("name", artist.getName());
         jgen.writeStringField("image", artist.getImage());
+        jgen.writeStringField("description", artist.getDescription());
         jgen.writeStringField("updatedAt", sdf.format(artist.getUpdatedAt()));
         jgen.writeStringField("createdAt", sdf.format(artist.getCreatedAt()));
         
