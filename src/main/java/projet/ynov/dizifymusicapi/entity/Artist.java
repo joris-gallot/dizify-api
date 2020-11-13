@@ -38,6 +38,9 @@ public class Artist {
     @Column(name = "image", nullable = false)
     private String image;
     
+    @Column(name = "description", nullable = false)
+    private String description;
+    
     @OneToMany(mappedBy="author", cascade={CascadeType.ALL})
     private Set<Title> titles;
     
@@ -60,6 +63,7 @@ public class Artist {
 		this.id = params.getId();
 		this.name = params.getName();
 		this.image = params.getImage();
+		this.description = params.getDescription();
 		this.createdAt = params.getCreatedAt();
 		this.updatedAt = params.getUpdatedAt();
 	}
@@ -119,6 +123,15 @@ public class Artist {
 	public void setAlbums(Set<Album> albums) {
 		this.albums = albums;
 	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	
 	
     
 }
