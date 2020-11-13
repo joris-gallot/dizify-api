@@ -5,9 +5,9 @@ INSERT INTO artists (id, name, image, description, updated_at, created_at)
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
     '2020-11-13 11:36:02', '2020-11-13 11:36:02');
 
-INSERT INTO albums (id, name, image, publication_date, updated_at, created_at)
+INSERT INTO albums (id, name, image, author_id, publication_date, updated_at, created_at)
   VALUES
-    (1, 'Encore', 'https://picsum.photos/200', '2004-11-13 11:36:02', '2020-11-13 11:36:02', '2020-11-13 11:36:02');
+    (1, 'Encore', 'https://picsum.photos/200', 1, '2004-11-13 11:36:02', '2020-11-13 11:36:02', '2020-11-13 11:36:02');
 INSERT INTO titles (id, name, duration, author_id, album_id, updated_at, created_at)
   VALUES
     (1, 'Mosh', '00:05:17', 1, 1, '2020-11-13 11:36:02', '2020-11-13 11:36:02'),
@@ -15,9 +15,9 @@ INSERT INTO titles (id, name, duration, author_id, album_id, updated_at, created
     (3, 'Rain Man', '00:05:13', 1, 1, '2020-11-13 11:36:02', '2020-11-13 11:36:02');
 
 
-INSERT INTO albums (id, name, image, publication_date, updated_at, created_at)
+INSERT INTO albums (id, name, image, author_id, publication_date, updated_at, created_at)
   VALUES
-    (2, 'Recovery', 'https://picsum.photos/200', '2010-01-22 01:21:22', '2020-11-13 11:36:02', '2020-11-13 11:36:02');
+    (2, 'Recovery', 'https://picsum.photos/200', 1,'2010-01-22 01:21:22', '2020-11-13 11:36:02', '2020-11-13 11:36:02');
 INSERT INTO titles (id, name, duration, author_id, album_id, updated_at, created_at) 
   VALUES
     (4, 'On Fire', '00:03:33', 1, 2, '2020-11-13 11:36:02', '2020-11-13 11:36:02'),
@@ -37,9 +37,9 @@ INSERT INTO artists (id, name, image, description, updated_at, created_at)
     'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.',
     '2020-11-13 11:36:02', '2020-11-13 11:36:02');
 
-INSERT INTO albums (id, name, image, publication_date, updated_at, created_at)
+INSERT INTO albums (id, name, image, author_id, publication_date, updated_at, created_at)
   VALUES
-    (3, 'Abbey Road', 'https://picsum.photos/200', '1969-11-13 11:36:02', '2020-11-13 11:36:02', '2020-11-13 11:36:02');
+    (3, 'Abbey Road', 'https://picsum.photos/200', 1,'1969-11-13 11:36:02', '2020-11-13 11:36:02', '2020-11-13 11:36:02');
 INSERT INTO titles (id, name, duration, author_id, album_id, updated_at, created_at) 
   VALUES
     (12, 'Oh! Darling', '00:03:27', 2, 3, '2020-11-13 11:36:02', '2020-11-13 11:36:02'),
@@ -48,9 +48,9 @@ INSERT INTO titles (id, name, duration, author_id, album_id, updated_at, created
     (15, 'You Never Give Me Your Money', '00:04:02', 2, 3, '2020-11-13 11:36:02', '2020-11-13 11:36:02');
 
 
-INSERT INTO albums (id, name, image, publication_date, updated_at, created_at) 
+INSERT INTO albums (id, name, image, author_id, publication_date, updated_at, created_at)
   VALUES
-    (4, 'Revolver', 'https://picsum.photos/200', '1966-01-22 01:21:22', '2020-11-13 11:36:02', '2020-11-13 11:36:02');
+    (4, 'Revolver', 'https://picsum.photos/200', 1,'1966-01-22 01:21:22', '2020-11-13 11:36:02', '2020-11-13 11:36:02');
 INSERT INTO titles (id, name, duration, author_id, album_id, updated_at, created_at) 
   VALUES
     (16, 'Taxman', '00:02:41', 2, 4, '2020-11-13 11:36:02', '2020-11-13 11:36:02'),
