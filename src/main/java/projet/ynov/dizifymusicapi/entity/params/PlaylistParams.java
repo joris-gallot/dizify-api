@@ -8,8 +8,6 @@ public class PlaylistParams {
 	
     private String name;
 
-    private long user_id; // to delete with auth
-
     private Iterable<Long> title_ids;
 
     private Date createdAt;
@@ -30,14 +28,6 @@ public class PlaylistParams {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public long getUser_id() {
-		return user_id;
-	}
-
-	public void setUser_id(long user_id) {
-		this.user_id = user_id;
 	}
 
 	public Date getCreatedAt() {

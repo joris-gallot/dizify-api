@@ -41,6 +41,10 @@ public class UserSerializer extends StdSerializer<User> {
         jgen.writeStringField("updatedAt", sdf.format(user.getUpdatedAt()));
         jgen.writeStringField("createdAt", sdf.format(user.getCreatedAt()));
         
+        if (user.getToken() != null) {
+        	jgen.writeStringField("token", user.getToken());        	
+        }
+        
         // Set list of playlists
  		jgen.writeFieldName("playlists");
         jgen.writeStartArray();

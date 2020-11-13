@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import projet.ynov.dizifymusicapi.entity.Artist;
 import projet.ynov.dizifymusicapi.entity.params.ArtistParams;
-import projet.ynov.dizifymusicapi.exceptions.ResourceNotFoundException;
+import projet.ynov.dizifymusicapi.exceptions.GlobalHttpException;
 import projet.ynov.dizifymusicapi.repositories.ArtistRepository;
 
 @RestController
@@ -46,13 +46,13 @@ public class ArtistController {
 	 *
 	 * @param artistId the Artist id
 	 * @return the Artists by id
-	 * @throws ResourceNotFoundException the resource not found exception
+	 * @throws GlobalHttpException the resource not found exception
 	 */
 	@GetMapping("/artists/{id}")
-	public ResponseEntity<Artist> getArtistsById(@PathVariable(value = "id") Long artistId) throws ResourceNotFoundException {
+	public ResponseEntity<Artist> getArtistsById(@PathVariable(value = "id") Long artistId) throws GlobalHttpException {
 		Artist artist = artistRepository
 			  				.findById(artistId)
-	  						.orElseThrow(() -> new ResourceNotFoundException(HttpStatus.NOT_FOUND, "Artist not found with id : " + artistId));
+	  						.orElseThrow(() -> new GlobalHttpException(HttpStatus.NOT_FOUND, "Artist not found with id : " + artistId));
 	  
 		return ResponseEntity.ok().body(artist);
 	}
@@ -87,13 +87,13 @@ public class ArtistController {
 	 * @param artistId the Artist id
 	 * @param artistDetails the Artist details
 	 * @return the response entity
-	 * @throws ResourceNotFoundException the resource not found exception
+	 * @throws GlobalHttpException the resource not found exception
 	 */
 	@PutMapping("/artists/{id}")
-	public ResponseEntity<Artist> updateArtist(@PathVariable(value = "id") Long artistId, @Validated @RequestBody ArtistParams artistDetails) throws ResourceNotFoundException {
+	public ResponseEntity<Artist> updateArtist(@PathVariable(value = "id") Long artistId, @Validated @RequestBody ArtistParams artistDetails) throws GlobalHttpException {
 	    Artist artist = artistRepository
 	            			.findById(artistId)
-	            			.orElseThrow(() -> new ResourceNotFoundException(HttpStatus.NOT_FOUND, "Artist not found with id : " + artistId));
+	            			.orElseThrow(() -> new GlobalHttpException(HttpStatus.NOT_FOUND, "Artist not found with id : " + artistId));
 	    
 	    if (artistDetails.getName() != null) {
 	    	artist.setName(artistDetails.getName());	    	
@@ -119,7 +119,7 @@ public class ArtistController {
 	public Map<String, Boolean> deleteArtist(@PathVariable(value = "id") Long artistId) throws Exception {
 	    Artist artist = artistRepository
 	            			.findById(artistId)
-	            			.orElseThrow(() -> new ResourceNotFoundException(HttpStatus.NOT_FOUND, "Artist not found with id : " + artistId));
+	            			.orElseThrow(() -> new GlobalHttpException(HttpStatus.NOT_FOUND, "Artist not found with id : " + artistId));
 
 	    artistRepository.delete(artist);
 	    Map<String, Boolean> response = new HashMap<>();
