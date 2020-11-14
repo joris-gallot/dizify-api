@@ -16,8 +16,10 @@ import javax.persistence.Table;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import projet.ynov.dizifymusicapi.entity.params.AlbumParams;
@@ -55,6 +57,10 @@ public class Album {
     @Column(name = "updated_at", nullable = false)
     @LastModifiedDate
     private Date updatedAt;
+    
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @Transient
+    private Boolean isFavorite;
     
     public Album() {
     	super();
@@ -133,4 +139,14 @@ public class Album {
 		this.titles = titles;
 	}
 
+	public boolean isFavorite() {
+		return isFavorite;
+	}
+
+	public void setFavorite(boolean isFavorite) {
+		this.isFavorite = isFavorite;
+	}
+	
+	
+	
 }

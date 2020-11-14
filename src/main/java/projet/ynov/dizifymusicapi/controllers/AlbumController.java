@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,12 +24,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import projet.ynov.dizifymusicapi.entity.Album;
 import projet.ynov.dizifymusicapi.entity.Artist;
+import projet.ynov.dizifymusicapi.entity.Favorite;
 import projet.ynov.dizifymusicapi.entity.Title;
+import projet.ynov.dizifymusicapi.entity.User;
 import projet.ynov.dizifymusicapi.entity.params.AlbumParams;
 import projet.ynov.dizifymusicapi.exceptions.GlobalHttpException;
 import projet.ynov.dizifymusicapi.repositories.AlbumRepository;
 import projet.ynov.dizifymusicapi.repositories.ArtistRepository;
+import projet.ynov.dizifymusicapi.repositories.FavoriteRepository;
 import projet.ynov.dizifymusicapi.repositories.TitleRepository;
+import projet.ynov.dizifymusicapi.repositories.UserRepository;
 
 @RestController
 @RequestMapping("/api")
@@ -39,6 +45,23 @@ public class AlbumController {
 	private ArtistRepository artistRepository;
 	@Autowired
 	private TitleRepository titleRepository;
+	@Autowired
+	private UserRepository userRepository;
+	@Autowired
+	private FavoriteRepository favoriteRepository;
+	
+	private User getUserLogged() {
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String username;
+		
+		if (principal instanceof UserDetails) {
+			username = ((UserDetails)principal).getUsername();
+		} else {
+			username = principal.toString();
+		}
+		
+		return userRepository.findByUsername(username);
+	}
 	
 	/**
 	 * Get all Album list.
@@ -47,7 +70,26 @@ public class AlbumController {
 	 */
 	@GetMapping("/albums")
 	public List<Album> getAllAlbums() {
-		return albumRepository.findAll();
+		List<Album> albums = albumRepository.findAll();
+		User userLogged = getUserLogged();
+		
+		
+		for (Album album : albums) {
+			if(userLogged != null) {
+				Favorite favorite = favoriteRepository.findByUserAndAlbum(userLogged.getId(), album.getId());
+				
+				if (favorite != null) {
+					album.setFavorite(true);
+				} else {
+					album.setFavorite(false);
+				}
+			} else {
+				album.setFavorite(false);
+			}
+		}
+	
+		
+		return albums;
     }
 
 	/**
