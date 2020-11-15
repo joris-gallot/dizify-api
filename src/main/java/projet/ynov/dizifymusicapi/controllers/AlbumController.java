@@ -104,6 +104,20 @@ public class AlbumController {
 		Album album = albumRepository
 			  				.findById(albumId)
 	  						.orElseThrow(() -> new GlobalHttpException(HttpStatus.NOT_FOUND, "Album not found with id : " + albumId));
+		
+		User userLogged = getUserLogged();
+		
+		if(userLogged != null) {
+			Favorite favorite = favoriteRepository.findByUserAndAlbum(userLogged.getId(), album.getId());
+			
+			if (favorite != null) {
+				album.setFavorite(true);
+			} else {
+				album.setFavorite(false);
+			}
+		} else {
+			album.setFavorite(false);
+		}
 	  
 		return ResponseEntity.ok().body(album);
 	}
