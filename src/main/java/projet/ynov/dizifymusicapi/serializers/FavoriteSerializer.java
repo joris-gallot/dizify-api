@@ -49,6 +49,21 @@ public class FavoriteSerializer extends StdSerializer<Favorite> {
             jgen.writeStringField("name", album.getName());
             jgen.writeStringField("publicationDate", album.getPublicationDate().toString());
             jgen.writeStringField("image", album.getImage());
+            
+            Artist albumArtist = album.getAuthor();
+            if (albumArtist == null) {
+            	jgen.writeStringField("artist", null);
+            } else {
+            	jgen.writeFieldName("artist");
+            	jgen.writeStartObject();
+                jgen.writeNumberField("id", albumArtist.getId());
+                jgen.writeStringField("name", albumArtist.getName());
+                jgen.writeStringField("image", albumArtist.getImage());
+                jgen.writeStringField("description", albumArtist.getDescription());
+                jgen.writeStringField("updatedAt", sdf.format(albumArtist.getUpdatedAt()));
+                jgen.writeStringField("createdAt", sdf.format(albumArtist.getCreatedAt()));
+                jgen.writeEndObject();
+            }
         }
         
         // Set artist
@@ -57,6 +72,7 @@ public class FavoriteSerializer extends StdSerializer<Favorite> {
         	jgen.writeStringField("type", "ARTIST_TYPE");
             jgen.writeNumberField("artist_id", artist.getId());
             jgen.writeStringField("name", artist.getName());
+            jgen.writeStringField("image", artist.getImage());
             jgen.writeStringField("image", artist.getImage());
         }
         
@@ -67,6 +83,21 @@ public class FavoriteSerializer extends StdSerializer<Favorite> {
             jgen.writeNumberField("title_id", title.getId());
             jgen.writeStringField("name", title.getName());
             jgen.writeStringField("duration", title.getDuration().toString());
+            
+            Artist titleArtist = album.getAuthor();
+            if (titleArtist == null) {
+            	jgen.writeStringField("artist", null);
+            } else {
+            	jgen.writeFieldName("artist");
+            	jgen.writeStartObject();
+                jgen.writeNumberField("id", titleArtist.getId());
+                jgen.writeStringField("name", titleArtist.getName());
+                jgen.writeStringField("image", titleArtist.getImage());
+                jgen.writeStringField("description", titleArtist.getDescription());
+                jgen.writeStringField("updatedAt", sdf.format(titleArtist.getUpdatedAt()));
+                jgen.writeStringField("createdAt", sdf.format(titleArtist.getCreatedAt()));
+                jgen.writeEndObject();
+            }
         }
         
     	jgen.writeEndObject();
