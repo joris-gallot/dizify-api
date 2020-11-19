@@ -35,19 +35,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     // Entry points
     http.authorizeRequests()
-    	.antMatchers(
-    	  "/swagger-resources/**",
-          "/swagger-ui/**",
-          "/swagger-ui.html",
-          "/v2/api-docs",
-          "/webjars/**",
-          "/public",
-          "/configuration/**",
-          "/api/auth/**",
-    	  "/api/titles/**",
-    	  "/api/artists/**",
-    	  "/api/albums/**").permitAll()
-        // Disallow everything else..
+		.antMatchers(
+		  "/swagger-resources/**",
+	      "/swagger-ui/**",
+	      "/swagger-ui.html",
+	      "/v2/api-docs",
+	      "/webjars/**",
+	      "/public",
+	      "/configuration/**",
+	      "/api/auth/**",
+		  "/api/titles/**",
+		  "/api/artists/**",
+		  "/api/albums/**").permitAll()
         .anyRequest().authenticated();
 
     // If a user try to access a resource without having enough permissions
