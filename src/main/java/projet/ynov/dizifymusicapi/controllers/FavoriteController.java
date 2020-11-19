@@ -65,15 +65,25 @@ public class FavoriteController {
 	}
 	
 	/**
-	 * Get all Favorite list.
+	 * Get paginate Favorite list.
 	 *
 	 * @return the list
 	 */
 	@GetMapping("/favorites")
-	public List<Favorite> getAllFavorites(@RequestParam("page") int page, @RequestParam("per") int per) {		
+	public List<Favorite> getAllPaginateFavorites(@RequestParam("page") int page, @RequestParam("per") int per) {		
 		Pageable sortedDesc = PageRequest.of(page, per, Sort.by("createdAt").descending());
 		
 		return favoriteRepository.findAllByUser(getUserLogged(), sortedDesc);
+    }
+	
+	/**
+	 * Get all Favorite list.
+	 *
+	 * @return the list
+	 */
+	@GetMapping("/all-favorites")
+	public List<Favorite> getAllFavorites() {			
+		return favoriteRepository.findAllByUser(getUserLogged());
     }
 
 	/**

@@ -9,6 +9,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
@@ -60,7 +61,8 @@ public class PlaylistController {
 	 * @return the list
 	 */
 	@GetMapping("/playlists")
-	public List<Playlist> getAllPlaylists() {		
+	public List<Playlist> getAllPlaylists() {
+		System.out.println(getUserLogged());
 		return playlistRepository.findAllByUser(getUserLogged());
     }
 
