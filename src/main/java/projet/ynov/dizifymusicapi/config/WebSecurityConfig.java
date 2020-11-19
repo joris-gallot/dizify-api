@@ -34,12 +34,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
     // Entry points
-    http.authorizeRequests()//
-        .antMatchers("/api/auth/signin").permitAll()//
-        .antMatchers("/api/auth/signup").permitAll()//
-        .antMatchers("/api/titles/**").permitAll()//
-        .antMatchers("/api/artists/**").permitAll()//
-        .antMatchers("/api/albums/**").permitAll()//
+    http.authorizeRequests()
+		.antMatchers(
+		  "/swagger-resources/**",
+	      "/swagger-ui/**",
+	      "/swagger-ui.html",
+	      "/v2/api-docs",
+	      "/webjars/**",
+	      "/public",
+	      "/configuration/**",
+	      "/api/auth/**",
+		  "/api/titles/**",
+		  "/api/artists/**",
+		  "/api/albums/**").permitAll()
+
         // Disallow everything else..
         .anyRequest().authenticated();
 
