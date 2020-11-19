@@ -1,8 +1,8 @@
 package projet.ynov.dizifymusicapi.security;
 
-import projet.ynov.dizifymusicapi.entity.User;
+import projet.ynov.dizifymusicapi.entity.Admin;
 import projet.ynov.dizifymusicapi.enums.Role;
-import projet.ynov.dizifymusicapi.repositories.UserRepository;
+import projet.ynov.dizifymusicapi.repositories.AdminRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,31 +16,31 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
-public class MyUserDetails implements UserDetailsService {
+public class MyAdminDetails implements UserDetailsService {
 
   @Autowired
-  private UserRepository userRepository;
+  private AdminRepository adminRepository;
   
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-	User user = userRepository.findByUsername(username);
+	Admin admin = adminRepository.findByUsername(username);
 
-	if (user == null) {
-		throw new UsernameNotFoundException("User '" + username + "' not found");
+	if (admin == null) {
+		throw new UsernameNotFoundException("Admin '" + username + "' not found");
 	}
 	
 	List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-	authorities.add(new SimpleGrantedAuthority(Role.ROLE_USER.getAuthority()));
+	authorities.add(new SimpleGrantedAuthority(Role.ROLE_ADMIN.getAuthority()));
         
 	return org.springframework.security.core.userdetails.User//
-		.withUsername(username)//
-		.password(user.getPassword())//
-		.authorities(authorities)//
-        .accountExpired(false)//
-        .accountLocked(false)//
-        .credentialsExpired(false)//
-        .disabled(false)//
-        .build();
+			.withUsername(username)//
+			.password(admin.getPassword())//
+			.authorities(authorities)//
+	        .accountExpired(false)//
+	        .accountLocked(false)//
+	        .credentialsExpired(false)//
+	        .disabled(false)//
+	        .build();
   }
 
 }

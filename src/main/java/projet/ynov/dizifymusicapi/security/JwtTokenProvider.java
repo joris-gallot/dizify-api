@@ -37,6 +37,8 @@ public class JwtTokenProvider {
 
   @Autowired
   private MyUserDetails myUserDetails;
+  @Autowired
+  private MyAdminDetails myAdminDetails;
 
   @PostConstruct
   protected void init() {
@@ -59,8 +61,16 @@ public class JwtTokenProvider {
   }
 
   public UsernamePasswordAuthenticationToken getAuthentication(String token) {
-    UserDetails userDetails = myUserDetails.loadUserByUsername(getUsername(token), getRole(token));
-    return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+	Role role = getRole(token);
+	UserDetails userDetails = null;
+	
+	if (role == Role.ROLE_ADMIN) {
+		userDetails = myAdminDetails.loadUserByUsername(getUsername(token));		
+	} else {
+		userDetails = myUserDetails.loadUserByUsername(getUsername(token));
+	}
+
+	return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
   }
   
   public Role getRole(String token) {
