@@ -61,6 +61,7 @@ public class PlaylistController {
 	 * @return the list
 	 */
 	@GetMapping("/playlists")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	public List<Playlist> getAllPlaylists() {
 		System.out.println(getUserLogged());
 		return playlistRepository.findAllByUser(getUserLogged());
@@ -73,6 +74,7 @@ public class PlaylistController {
 	 * @return the Playlists by id
 	 * @throws GlobalHttpException the resource not found exception
 	 */
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@GetMapping("/playlists/{id}")
 	public ResponseEntity<Playlist> getPlaylistsById(@PathVariable(value = "id") Long playlistId) throws GlobalHttpException {		
 		User userLogged = getUserLogged();
@@ -94,6 +96,7 @@ public class PlaylistController {
 	 * @param params the PlaylistParams
 	 * @return the Playlist
 	 */
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@PostMapping("/playlists")
 	public Playlist createPlaylist(@Validated @RequestBody PlaylistParams params) {
 		User userLogged = getUserLogged();
@@ -120,6 +123,7 @@ public class PlaylistController {
 	 * @return the response entity
 	 * @throws GlobalHttpException the resource not found exception
 	 */
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@PutMapping("/playlists/{id}")
 	public ResponseEntity<Playlist> updatePlaylist(@PathVariable(value = "id") Long playlistId, @RequestBody PlaylistParams playlistDetails)
 			throws GlobalHttpException {
@@ -156,6 +160,7 @@ public class PlaylistController {
 	 * @return the map
 	 * @throws Exception the exception
 	 */
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@DeleteMapping("/playlists/{id}")
 	public Map<String, Boolean> deletePlaylist(@PathVariable(value = "id") Long playlistId) throws Exception {
 		User userLogged = getUserLogged();
