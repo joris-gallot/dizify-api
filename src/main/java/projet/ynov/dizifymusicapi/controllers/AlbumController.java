@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
@@ -128,6 +129,7 @@ public class AlbumController {
 	 * @param params the AlbumParams
 	 * @return the Album
 	 */
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PostMapping("/albums")
 	public Album createAlbum(@Validated @RequestBody AlbumParams params) {
 		Artist artist = artistRepository
@@ -167,6 +169,7 @@ public class AlbumController {
 	 * @return the response entity
 	 * @throws GlobalHttpException the resource not found exception
 	 */
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PutMapping("/albums/{id}")
 	public ResponseEntity<Album> updateAlbum(@PathVariable(value = "id") Long albumId, @Validated @RequestBody AlbumParams albumDetails) throws GlobalHttpException {
 	    Album album = albumRepository
@@ -201,6 +204,7 @@ public class AlbumController {
 	 * @return the map
 	 * @throws Exception the exception
 	 */
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@DeleteMapping("/albums/{id}")
 	public Map<String, Boolean> deleteAlbum(@PathVariable(value = "id") Long albumId) throws Exception {
 	    Album album = albumRepository

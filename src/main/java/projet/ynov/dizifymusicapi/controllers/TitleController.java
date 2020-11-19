@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -72,6 +73,7 @@ public class TitleController {
 	 * @param paramd TitleParams
 	 * @return the Title
 	 */
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PostMapping("/titles")
 	public Title createTitle(@Validated @RequestBody TitleParams params) {
 		Artist artist = artistRepository
@@ -108,6 +110,7 @@ public class TitleController {
 	 * @return the response entity
 	 * @throws GlobalHttpException the resource not found exception
 	 */
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PutMapping("/titles/{id}")
 	public ResponseEntity<Title> updateTitle(@PathVariable(value = "id") Long titleId, @Validated @RequestBody TitleParams titleDetails) throws GlobalHttpException {
 	    Title title = titleRepository
@@ -134,6 +137,7 @@ public class TitleController {
 	 * @return the map
 	 * @throws Exception the exception
 	 */
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@DeleteMapping("/titles/{id}")
 	public Map<String, Boolean> deleteTitle(@PathVariable(value = "id") Long titleId) throws Exception {
 	    Title title = titleRepository

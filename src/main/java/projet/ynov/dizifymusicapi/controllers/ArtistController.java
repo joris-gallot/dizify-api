@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,9 +23,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import projet.ynov.dizifymusicapi.entity.Artist;
+import projet.ynov.dizifymusicapi.entity.User;
 import projet.ynov.dizifymusicapi.entity.params.ArtistParams;
 import projet.ynov.dizifymusicapi.exceptions.GlobalHttpException;
 import projet.ynov.dizifymusicapi.repositories.ArtistRepository;
+import projet.ynov.dizifymusicapi.repositories.UserRepository;
 
 @RestController
 @RequestMapping("/api")
@@ -50,6 +55,7 @@ public class ArtistController {
 	 */
 	@GetMapping("/artists/{id}")
 	public ResponseEntity<Artist> getArtistsById(@PathVariable(value = "id") Long artistId) throws GlobalHttpException {
+		
 		Artist artist = artistRepository
 			  				.findById(artistId)
 	  						.orElseThrow(() -> new GlobalHttpException(HttpStatus.NOT_FOUND, "Artist not found with id : " + artistId));
@@ -63,8 +69,10 @@ public class ArtistController {
 	 * @param artist the Artist
 	 * @return the Artist
 	 */
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PostMapping("/artists")
 	public Artist createArtist(@Validated @RequestBody ArtistParams params) {
+		
 		params.setCreatedAt(new Date());
 		params.setUpdatedAt(new Date());
 		
@@ -89,6 +97,7 @@ public class ArtistController {
 	 * @return the response entity
 	 * @throws GlobalHttpException the resource not found exception
 	 */
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PutMapping("/artists/{id}")
 	public ResponseEntity<Artist> updateArtist(@PathVariable(value = "id") Long artistId, @Validated @RequestBody ArtistParams artistDetails) throws GlobalHttpException {
 	    Artist artist = artistRepository
@@ -119,6 +128,7 @@ public class ArtistController {
 	 * @return the map
 	 * @throws Exception the exception
 	 */
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@DeleteMapping("/artists/{id}")
 	public Map<String, Boolean> deleteArtist(@PathVariable(value = "id") Long artistId) throws Exception {
 	    Artist artist = artistRepository
