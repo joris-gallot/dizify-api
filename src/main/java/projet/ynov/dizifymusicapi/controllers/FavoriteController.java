@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
@@ -69,6 +70,7 @@ public class FavoriteController {
 	 *
 	 * @return the list
 	 */
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@GetMapping("/favorites")
 	public List<Favorite> getAllPaginateFavorites(@RequestParam("page") int page, @RequestParam("per") int per) {		
 		Pageable sortedDesc = PageRequest.of(page, per, Sort.by("createdAt").descending());
@@ -81,6 +83,7 @@ public class FavoriteController {
 	 *
 	 * @return the list
 	 */
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@GetMapping("/all-favorites")
 	public List<Favorite> getAllFavorites() {			
 		return favoriteRepository.findAllByUser(getUserLogged());
@@ -93,6 +96,7 @@ public class FavoriteController {
 	 * @return the Favorites by id
 	 * @throws GlobalHttpException the resource not found exception
 	 */
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@GetMapping("/favorites/{id}")
 	public ResponseEntity<Favorite> getFavoritesById(@PathVariable(value = "id") Long favoriteId) throws GlobalHttpException {
 		
@@ -116,6 +120,7 @@ public class FavoriteController {
 	 * @return the Favorite
 	 * @throws Exception 
 	 */
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@PostMapping("/favorites")
 	public Favorite createFavorite(@Validated @RequestBody FavoriteParams params) throws Exception {
 		User userLogged = getUserLogged();
@@ -159,6 +164,7 @@ public class FavoriteController {
 	 * @return the map
 	 * @throws Exception the exception
 	 */
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@DeleteMapping("/favorites/{id}")
 	public Map<String, Boolean> deleteFavorite(@PathVariable(value = "id") Long favoriteId) throws Exception {
 
