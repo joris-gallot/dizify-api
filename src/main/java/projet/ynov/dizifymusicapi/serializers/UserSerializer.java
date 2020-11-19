@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 
 import projet.ynov.dizifymusicapi.entity.Playlist;
 import projet.ynov.dizifymusicapi.entity.User;
+import projet.ynov.dizifymusicapi.enums.Role;
 
 public class UserSerializer extends StdSerializer<User> {
     
@@ -38,6 +39,7 @@ public class UserSerializer extends StdSerializer<User> {
         jgen.writeStringField("username", user.getUsername());
         jgen.writeStringField("email", user.getEmail());
         jgen.writeStringField("image", user.getImage());
+        jgen.writeStringField("role", Role.ROLE_USER.toString());
         jgen.writeStringField("updatedAt", sdf.format(user.getUpdatedAt()));
         jgen.writeStringField("createdAt", sdf.format(user.getCreatedAt()));
         

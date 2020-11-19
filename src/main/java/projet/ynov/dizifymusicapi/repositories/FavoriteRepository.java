@@ -13,6 +13,7 @@ import projet.ynov.dizifymusicapi.entity.User;
 //@Repository
 public interface FavoriteRepository extends JpaRepository<Favorite, Long> {
 	List<Favorite> findAllByUser(User user, Pageable pageable);
+	List<Favorite> findAllByUser(User user);
 
 	@Query(value = "SELECT * FROM favorites WHERE user_id = ?1 and album_id = ?2", nativeQuery = true)
 	Favorite findByUserAndAlbum(long userId, long albumId);

@@ -2,6 +2,7 @@ package projet.ynov.dizifymusicapi.security;
 
 import java.util.Base64;
 import java.util.Date;
+import java.util.LinkedHashMap;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +19,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import projet.ynov.dizifymusicapi.enums.Role;
 import projet.ynov.dizifymusicapi.exceptions.CustomException;
 
 @Component
@@ -40,8 +43,9 @@ public class JwtTokenProvider {
     secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
   }
 
-  public String createToken(String username) {
+  public String createToken(String username, Role role) {
     Claims claims = Jwts.claims().setSubject(username);
+    claims.put("role", new SimpleGrantedAuthority(role.getAuthority()));
 
     Date now = new Date();
     Date validity = new Date(now.getTime() + validityInMilliseconds);
@@ -57,6 +61,11 @@ public class JwtTokenProvider {
   public UsernamePasswordAuthenticationToken getAuthentication(String token) {
     UserDetails userDetails = myUserDetails.loadUserByUsername(getUsername(token));
     return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+  }
+  
+  public Role getRole(String token) {
+	  String role = (String) ((LinkedHashMap) Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("role")).get("authority");
+	  return Role.valueOf(role);
   }
 
   public String getUsername(String token) {
