@@ -76,16 +76,16 @@ public class AlbumController {
 		
 		
 		for (Album album : albums) {
-			if(userLogged != null) {
+			if(userLogged == null) {
+				album.setFavoriteId(0L);
+			} else {
 				Favorite favorite = favoriteRepository.findByUserAndAlbum(userLogged.getId(), album.getId());
 				
-				if (favorite != null) {
-					album.setFavorite(true);
+				if (favorite == null) {
+					album.setFavoriteId(0L);
 				} else {
-					album.setFavorite(false);
+					album.setFavoriteId(favorite.getId());
 				}
-			} else {
-				album.setFavorite(false);
 			}
 		}
 	
@@ -108,16 +108,16 @@ public class AlbumController {
 		
 		User userLogged = getUserLogged();
 		
-		if(userLogged != null) {
+		if(userLogged == null) {
+			album.setFavoriteId(0L);
+		} else {
 			Favorite favorite = favoriteRepository.findByUserAndAlbum(userLogged.getId(), album.getId());
 			
-			if (favorite != null) {
-				album.setFavorite(true);
+			if (favorite == null) {
+				album.setFavoriteId(0L);
 			} else {
-				album.setFavorite(false);
+				album.setFavoriteId(favorite.getId());
 			}
-		} else {
-			album.setFavorite(false);
 		}
 	  
 		return ResponseEntity.ok().body(album);
