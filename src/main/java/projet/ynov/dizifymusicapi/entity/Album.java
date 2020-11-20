@@ -13,10 +13,10 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.annotation.Transient;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -60,7 +60,7 @@ public class Album {
     
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @Transient
-    private Boolean isFavorite;
+    private long favoriteId;
     
     public Album() {
     	super();
@@ -139,14 +139,11 @@ public class Album {
 		this.titles = titles;
 	}
 
-	public boolean isFavorite() {
-		return isFavorite;
+	public long getFavoriteId() {
+		return favoriteId;
 	}
 
-	public void setFavorite(boolean isFavorite) {
-		this.isFavorite = isFavorite;
+	public void setFavoriteId(long favoriteId) {
+		this.favoriteId = favoriteId;
 	}
-	
-	
-	
 }

@@ -38,10 +38,15 @@ public class AlbumSerializer extends StdSerializer<Album> {
         jgen.writeNumberField("id", album.getId());
         jgen.writeStringField("name", album.getName());
         jgen.writeStringField("image", album.getImage());
-        jgen.writeBooleanField("isFavorite", album.isFavorite());
         jgen.writeStringField("publicationDate", album.getPublicationDate().toString());
         jgen.writeStringField("updatedAt", sdf.format(album.getUpdatedAt()));
         jgen.writeStringField("createdAt", sdf.format(album.getCreatedAt()));
+        
+        if (album.getFavoriteId() == 0L) {        	
+        	jgen.writeStringField("favoriteId", null);
+        } else {
+        	jgen.writeNumberField("favoriteId", album.getFavoriteId());
+        }
         
     	// Set list of titles
 		jgen.writeFieldName("titles");
