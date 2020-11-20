@@ -41,6 +41,12 @@ public class ArtistSerializer extends StdSerializer<Artist> {
         jgen.writeStringField("description", artist.getDescription());
         jgen.writeStringField("updatedAt", sdf.format(artist.getUpdatedAt()));
         jgen.writeStringField("createdAt", sdf.format(artist.getCreatedAt()));
+
+        if (artist.getFavoriteId() == 0L) {        	
+        	jgen.writeStringField("favoriteId", null);
+        } else {
+        	jgen.writeNumberField("favoriteId", artist.getFavoriteId());
+        }
         
         // Set list of titles
     	jgen.writeFieldName("titles");
@@ -53,6 +59,12 @@ public class ArtistSerializer extends StdSerializer<Artist> {
 	            jgen.writeStringField("duration", title.getDuration().toString());
 	            jgen.writeStringField("updatedAt", sdf.format(title.getUpdatedAt()));
 	            jgen.writeStringField("createdAt", sdf.format(title.getCreatedAt()));
+	            
+	            if (title.getFavoriteId() == 0L) {
+	            	jgen.writeStringField("favoriteId", null);
+	            } else {
+	            	jgen.writeNumberField("favoriteId", title.getFavoriteId());
+	            }
 	            
 	            if (title.getAlbum() != null) {
 	            	jgen.writeNumberField("album", title.getAlbum().getId());

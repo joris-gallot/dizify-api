@@ -10,6 +10,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,10 +22,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import projet.ynov.dizifymusicapi.entity.Album;
 import projet.ynov.dizifymusicapi.entity.Artist;
+import projet.ynov.dizifymusicapi.entity.Favorite;
+import projet.ynov.dizifymusicapi.entity.Title;
+import projet.ynov.dizifymusicapi.entity.User;
 import projet.ynov.dizifymusicapi.entity.params.ArtistParams;
 import projet.ynov.dizifymusicapi.exceptions.GlobalHttpException;
 import projet.ynov.dizifymusicapi.repositories.ArtistRepository;
+import projet.ynov.dizifymusicapi.repositories.FavoriteRepository;
+import projet.ynov.dizifymusicapi.repositories.TitleRepository;
+import projet.ynov.dizifymusicapi.repositories.UserRepository;
 
 @RestController
 @RequestMapping("/api")
@@ -31,6 +40,23 @@ public class ArtistController {
 
 	@Autowired
 	private ArtistRepository artistRepository;
+	@Autowired
+	private UserRepository userRepository;
+	@Autowired
+	private FavoriteRepository favoriteRepository;
+	
+	private User getUserLogged() {
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String username;
+		
+		if (principal instanceof UserDetails) {
+			username = ((UserDetails)principal).getUsername();
+		} else {
+			username = principal.toString();
+		}
+		
+		return userRepository.findByUsername(username);
+	}
 	
 	/**
 	 * Get all Artist list.
@@ -39,6 +65,33 @@ public class ArtistController {
 	 */
 	@GetMapping("/artists")
 	public List<Artist> getAllArtists() {
+		List<Artist> artists = artistRepository.findAll();
+		User userLogged = getUserLogged();
+		
+		
+		for (Artist artist: artists) {
+			if(userLogged == null) {
+				artist.setFavoriteId(0L);
+			} else {
+				Favorite artistFavorite = favoriteRepository.findByUserAndAlbum(userLogged.getId(), artist.getId());
+				
+				if (artistFavorite == null) {
+					artist.setFavoriteId(0L);
+				} else {
+					artist.setFavoriteId(artistFavorite.getId());
+				}
+				
+				for (Title title : artist.getTitles()) {
+					Favorite titleFavorite = favoriteRepository.findByUserAndTitle(userLogged.getId(), title.getId());
+					
+					if (titleFavorite == null) {
+						title.setFavoriteId(0L);
+					} else {
+						title.setFavoriteId(titleFavorite.getId());
+					}
+				}
+			}
+		}
 		return artistRepository.findAll();
     }
 
@@ -55,6 +108,29 @@ public class ArtistController {
 		Artist artist = artistRepository
 			  				.findById(artistId)
 	  						.orElseThrow(() -> new GlobalHttpException(HttpStatus.NOT_FOUND, "Artist not found with id : " + artistId));
+		
+		User userLogged = getUserLogged();
+		if(userLogged == null) {
+			artist.setFavoriteId(0L);
+		} else {
+			Favorite artistFavorite = favoriteRepository.findByUserAndArtist(userLogged.getId(), artist.getId());
+			
+			if (artistFavorite == null) {
+				artist.setFavoriteId(0L);
+			} else {
+				artist.setFavoriteId(artistFavorite.getId());
+			}
+			
+			for (Title title : artist.getTitles()) {
+				Favorite titleFavorite = favoriteRepository.findByUserAndTitle(userLogged.getId(), title.getId());
+				
+				if (titleFavorite == null) {
+					title.setFavoriteId(0L);
+				} else {
+					title.setFavoriteId(titleFavorite.getId());
+				}
+			}
+		}
 	  
 		return ResponseEntity.ok().body(artist);
 	}

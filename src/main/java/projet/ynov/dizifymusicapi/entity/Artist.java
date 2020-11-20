@@ -13,11 +13,13 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import projet.ynov.dizifymusicapi.entity.params.ArtistParams;
@@ -56,6 +58,10 @@ public class Artist {
     @Column(name = "updated_at", nullable = false)
     @LastModifiedDate
     private Date updatedAt;
+    
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @Transient
+    private long favoriteId;
     
     public Artist() {
     	super();
@@ -132,6 +138,14 @@ public class Artist {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public long getFavoriteId() {
+		return favoriteId;
+	}
+
+	public void setFavoriteId(long favoriteId) {
+		this.favoriteId = favoriteId;
 	}
 	
 	

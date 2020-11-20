@@ -17,4 +17,11 @@ public interface FavoriteRepository extends JpaRepository<Favorite, Long> {
 
 	@Query(value = "SELECT * FROM favorites WHERE user_id = ?1 and album_id = ?2", nativeQuery = true)
 	Favorite findByUserAndAlbum(long userId, long albumId);
+	
+	@Query(value = "SELECT * FROM favorites WHERE user_id = ?1 and artist_id = ?2", nativeQuery = true)
+	Favorite findByUserAndArtist(long userId, long artistId);
+	
+	@Query(value = "SELECT * FROM favorites WHERE user_id = ?1 and title_id = ?2", nativeQuery = true)
+	Favorite findByUserAndTitle(long userId, long titleId);
+	
 }

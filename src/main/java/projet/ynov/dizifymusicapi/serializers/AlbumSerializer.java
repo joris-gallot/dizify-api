@@ -59,6 +59,13 @@ public class AlbumSerializer extends StdSerializer<Album> {
 	            jgen.writeStringField("duration", title.getDuration().toString());
 	            jgen.writeStringField("updatedAt", sdf.format(title.getUpdatedAt()));
 	            jgen.writeStringField("createdAt", sdf.format(title.getCreatedAt()));
+	            
+	            if (title.getFavoriteId() == 0L) {
+	            	jgen.writeStringField("favoriteId", null);
+	            } else {
+	            	jgen.writeNumberField("favoriteId", title.getFavoriteId());
+	            }
+	            
 	            jgen.writeEndObject();
 	        }
     	}
