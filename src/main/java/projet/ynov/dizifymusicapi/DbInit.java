@@ -51,12 +51,11 @@ public class DbInit {
     
     @Autowired
     private PasswordEncoder passwordEncoder;
-
-	private Faker faker = new Faker();
     
     @PostConstruct
     public void init() throws ParseException {
     	if (adminRepository.findByUsername("admin") == null) {
+    		Faker faker = new Faker();
     		DateFormat formatter = new SimpleDateFormat("HH:mm:ss");
     		Random rd = new Random();
 
@@ -78,20 +77,30 @@ public class DbInit {
     			Artist artistCreated = artistRepository.save(artist);
     			
     			// CREATE ALBUMS
-    			for (int j = 0; j < 8; j++) {
-    				AlbumParams albumParams = new AlbumParams(faker.backToTheFuture().character(), "https://i.pravatar.cc/200", faker.date().birthday() ,new Date(), new Date());
+    			for (int j = 0; j < 3; j++) {
+    				AlbumParams albumParams = new AlbumParams(faker.name().title(), "https://i.pravatar.cc/200", faker.date().birthday() ,new Date(), new Date());
     				Album album = new Album(albumParams);
     				album.setAuthor(artistCreated);
-    				Album albumCreated = albumRepository.save(album);
+    				Album albumCreated = null;
+    				
+    				if (albumRepository.findByName(album.getName()) == null) {        					
+        				albumCreated = albumRepository.save(album);
+    				}
     				
     				// CREATE TITLES
-    				for (int k = 0; k < 20; k++) {
-        				Time duration = new Time(formatter.parse("00:03:27").getTime()); 
-        				TitleParams titleParams = new TitleParams(faker.leagueOfLegends().champion(), duration, new Date(), new Date());
+    				for (int k = 0; k < 5; k++) {
+    					int minutes = rd.nextInt(9);
+    					int seconds = rd.nextInt(59);
+    					
+        				Time duration = new Time(formatter.parse("00:0" + minutes + ":" + seconds).getTime()); 
+        				TitleParams titleParams = new TitleParams(faker.funnyName().name(), duration, new Date(), new Date());
         				Title title = new Title(titleParams);
         				title.setAuthor(artist);
-        				title.setAlbum(rd.nextBoolean() ? albumCreated : null);
-        				titleRepository.save(title);
+        				title.setAlbum(albumCreated != null && rd.nextBoolean() ? albumCreated : null);
+        				
+        				if (titleRepository.findByName(title.getName()) == null) {        					
+        					titleRepository.save(title);
+        				}
         			}	
     			}
     			

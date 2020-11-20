@@ -6,4 +6,6 @@ import projet.ynov.dizifymusicapi.entity.Title;
 
 
 //@Repository
-public interface TitleRepository extends JpaRepository<Title, Long> {}
+public interface TitleRepository extends JpaRepository<Title, Long> {
+	Title findByName(String name);
+}
