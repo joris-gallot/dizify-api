@@ -21,6 +21,7 @@ import projet.ynov.dizifymusicapi.entity.User;
 import projet.ynov.dizifymusicapi.entity.params.UserParams;
 import projet.ynov.dizifymusicapi.enums.Role;
 import projet.ynov.dizifymusicapi.exceptions.CustomException;
+import projet.ynov.dizifymusicapi.exceptions.GlobalHttpException;
 import projet.ynov.dizifymusicapi.repositories.AdminRepository;
 import projet.ynov.dizifymusicapi.repositories.UserRepository;
 import projet.ynov.dizifymusicapi.security.JwtTokenProvider;
@@ -117,19 +118,18 @@ public class AuthenticationController {
 	@PostMapping("/auth/admin/signin")
 	public Admin signinAdmin(@RequestBody UserParams params) {
 		try {
-		  List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-		  authorities.add(new SimpleGrantedAuthority(Role.ROLE_ADMIN.getAuthority()));
+		  Admin adminFinded = adminRepository.findByUsername(params.getUsername());
 		  
-	      authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(params.getUsername(), params.getPassword(), authorities));
-	      String token = jwtTokenProvider.createToken(params.getUsername(), Role.ROLE_ADMIN);
-	      Admin adminFinded = adminRepository.findByUsername(params.getUsername());
+		  if (passwordEncoder.matches(params.getPassword(), adminFinded.getPassword())) {	    	  
+		      String token = jwtTokenProvider.createToken(params.getUsername(), Role.ROLE_ADMIN);
+		      adminFinded.setToken(token);
+		      
+		      return adminFinded;
+	      }
 	      
-	      adminFinded.setToken(token);
-	      
-	      return adminFinded;
-	      
+		  throw new CustomException("Invalid username/password supplied", HttpStatus.UNPROCESSABLE_ENTITY);
 	    } catch (AuthenticationException e) {
-	      throw new CustomException("Invalid username/password supplied", HttpStatus.UNPROCESSABLE_ENTITY);
+	    	throw new GlobalHttpException(HttpStatus.NOT_FOUND, "Admin not found with username : " + params.getUsername());
 	    }
 	}
 	
@@ -141,24 +141,19 @@ public class AuthenticationController {
 	 */
 	@PostMapping("/auth/signin")
 	public User signin(@RequestBody UserParams params) {
-		try {
-		  System.out.println("ubhijnko,lm");
-
-		  List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-		  authorities.add(new SimpleGrantedAuthority(Role.ROLE_USER.getAuthority()));
-		  
-	      authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(params.getUsername(), params.getPassword(), authorities));
-
-		  System.out.println("ubhijnko,lm");
-	      String token = jwtTokenProvider.createToken(params.getUsername(), Role.ROLE_USER);
+		try {	  
 	      User userFinded = userRepository.findByUsername(params.getUsername());
 	      
-	      userFinded.setToken(token);
-	      
-	      return userFinded;
-	      
-	    } catch (AuthenticationException e) {
+	      if (passwordEncoder.matches(params.getPassword(), userFinded.getPassword())) {	    	  
+	    	  String token = jwtTokenProvider.createToken(params.getUsername(), Role.ROLE_USER);
+	    	  userFinded.setToken(token);
+	    	  
+	    	  return userFinded;
+	      }
+
 	      throw new CustomException("Invalid username/password supplied", HttpStatus.UNPROCESSABLE_ENTITY);
+	    } catch (AuthenticationException e) {
+	      throw new GlobalHttpException(HttpStatus.NOT_FOUND, "User not found with username : " + params.getUsername());
 	    }
 	}
 }
