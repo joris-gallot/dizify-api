@@ -11,6 +11,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,12 +25,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import projet.ynov.dizifymusicapi.entity.Album;
 import projet.ynov.dizifymusicapi.entity.Artist;
+import projet.ynov.dizifymusicapi.entity.Favorite;
 import projet.ynov.dizifymusicapi.entity.Title;
+import projet.ynov.dizifymusicapi.entity.User;
 import projet.ynov.dizifymusicapi.entity.params.TitleParams;
 import projet.ynov.dizifymusicapi.exceptions.GlobalHttpException;
 import projet.ynov.dizifymusicapi.repositories.AlbumRepository;
 import projet.ynov.dizifymusicapi.repositories.ArtistRepository;
+import projet.ynov.dizifymusicapi.repositories.FavoriteRepository;
 import projet.ynov.dizifymusicapi.repositories.TitleRepository;
+import projet.ynov.dizifymusicapi.repositories.UserRepository;
 
 @RestController
 @RequestMapping("/api")
@@ -40,6 +46,23 @@ public class TitleController {
 	private ArtistRepository artistRepository;
 	@Autowired
 	private AlbumRepository albumRepository;
+	@Autowired
+	private UserRepository userRepository;
+	@Autowired
+	private FavoriteRepository favoriteRepository;
+	
+	private User getUserLogged() {
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String username;
+		
+		if (principal instanceof UserDetails) {
+			username = ((UserDetails)principal).getUsername();
+		} else {
+			username = principal.toString();
+		}
+		
+		return userRepository.findByUsername(username);
+	}
 	
 	/**
 	 * Get all Title list.
@@ -48,7 +71,24 @@ public class TitleController {
 	 */
 	@GetMapping("/titles")
 	public List<Title> getAllTitles() {
-		return titleRepository.findAll();
+		List<Title> titles = titleRepository.findAll();
+		User userLogged = getUserLogged();
+		
+		for (Title title : titles) {
+			if(userLogged == null) {
+				title.setFavoriteId(0L);
+			} else {
+				Favorite titlefavorite = favoriteRepository.findByUserAndAlbum(userLogged.getId(), title.getId());
+				
+				if (titlefavorite == null) {
+					title.setFavoriteId(0L);
+				} else {
+					title.setFavoriteId(titlefavorite.getId());
+				}
+			}
+		}
+		
+		return titles;
     }
 
 	/**
@@ -63,6 +103,19 @@ public class TitleController {
 		Title title = titleRepository
 			  				.findById(titleId)
 	  						.orElseThrow(() -> new GlobalHttpException(HttpStatus.NOT_FOUND, "Title not found with id : " + titleId));
+		
+		User userLogged = getUserLogged();
+		if(userLogged == null) {
+			title.setFavoriteId(0L);
+		} else {
+			Favorite titlefavorite = favoriteRepository.findByUserAndAlbum(userLogged.getId(), title.getId());
+			
+			if (titlefavorite == null) {
+				title.setFavoriteId(0L);
+			} else {
+				title.setFavoriteId(titlefavorite.getId());
+			}
+		}
 	  
 		return ResponseEntity.ok().body(title);
 	}

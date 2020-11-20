@@ -79,12 +79,22 @@ public class AlbumController {
 			if(userLogged == null) {
 				album.setFavoriteId(0L);
 			} else {
-				Favorite favorite = favoriteRepository.findByUserAndAlbum(userLogged.getId(), album.getId());
+				Favorite albumfavorite = favoriteRepository.findByUserAndAlbum(userLogged.getId(), album.getId());
 				
-				if (favorite == null) {
+				if (albumfavorite == null) {
 					album.setFavoriteId(0L);
 				} else {
-					album.setFavoriteId(favorite.getId());
+					album.setFavoriteId(albumfavorite.getId());
+				}
+				
+				for (Title title : album.getTitles()) {
+					Favorite titleFavorite = favoriteRepository.findByUserAndTitle(userLogged.getId(), title.getId());
+					
+					if (titleFavorite == null) {
+						title.setFavoriteId(0L);
+					} else {
+						title.setFavoriteId(titleFavorite.getId());
+					}
 				}
 			}
 		}
@@ -111,12 +121,22 @@ public class AlbumController {
 		if(userLogged == null) {
 			album.setFavoriteId(0L);
 		} else {
-			Favorite favorite = favoriteRepository.findByUserAndAlbum(userLogged.getId(), album.getId());
+			Favorite albumfavorite = favoriteRepository.findByUserAndAlbum(userLogged.getId(), album.getId());
 			
-			if (favorite == null) {
+			if (albumfavorite == null) {
 				album.setFavoriteId(0L);
 			} else {
-				album.setFavoriteId(favorite.getId());
+				album.setFavoriteId(albumfavorite.getId());
+			}
+			
+			for (Title title : album.getTitles()) {
+				Favorite titleFavorite = favoriteRepository.findByUserAndTitle(userLogged.getId(), title.getId());
+				
+				if (titleFavorite == null) {
+					title.setFavoriteId(0L);
+				} else {
+					title.setFavoriteId(titleFavorite.getId());
+				}
 			}
 		}
 	  
