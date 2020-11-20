@@ -84,7 +84,7 @@ public class FavoriteSerializer extends StdSerializer<Favorite> {
             jgen.writeStringField("name", title.getName());
             jgen.writeStringField("duration", title.getDuration().toString());
             
-            Artist titleArtist = album.getAuthor();
+            Artist titleArtist = title.getAuthor();
             if (titleArtist == null) {
             	jgen.writeStringField("artist", null);
             } else {
