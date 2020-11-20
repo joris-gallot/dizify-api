@@ -19,6 +19,20 @@ public class TitleParams {
     private Date createdAt;
 
     private Date updatedAt;
+    
+    public TitleParams() {
+    	super();
+    }
+    
+
+	public TitleParams(String name, Time duration, Date createdAt, Date updatedAt) {
+		super();
+		this.name = name;
+		this.duration = duration;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
+	}
+
 
 	public long getId() {
 		return id;
