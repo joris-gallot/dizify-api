@@ -14,6 +14,19 @@ public class ArtistParams {
     private Date createdAt;
     
     private Date updatedAt;
+    
+    public ArtistParams() {
+    	super();
+    }
+    
+	public ArtistParams(String name, String image, String description, Date createdAt, Date updatedAt) {
+		super();
+		this.name = name;
+		this.image = image;
+		this.description = description;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
+	}
 
 	public long getId() {
 		return id;

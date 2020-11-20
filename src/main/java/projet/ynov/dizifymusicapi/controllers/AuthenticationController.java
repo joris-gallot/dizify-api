@@ -1,14 +1,11 @@
 package projet.ynov.dizifymusicapi.controllers;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,8 +23,6 @@ import projet.ynov.dizifymusicapi.repositories.AdminRepository;
 import projet.ynov.dizifymusicapi.repositories.UserRepository;
 import projet.ynov.dizifymusicapi.security.JwtTokenProvider;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 @RestController
 @RequestMapping("/api")
@@ -120,7 +115,7 @@ public class AuthenticationController {
 		try {
 		  Admin adminFinded = adminRepository.findByUsername(params.getUsername());
 		  
-		  if (passwordEncoder.matches(params.getPassword(), adminFinded.getPassword())) {	    	  
+		  if (adminFinded != null && passwordEncoder.matches(params.getPassword(), adminFinded.getPassword())) {	    	  
 		      String token = jwtTokenProvider.createToken(params.getUsername(), Role.ROLE_ADMIN);
 		      adminFinded.setToken(token);
 		      
@@ -144,7 +139,7 @@ public class AuthenticationController {
 		try {	  
 	      User userFinded = userRepository.findByUsername(params.getUsername());
 	      
-	      if (passwordEncoder.matches(params.getPassword(), userFinded.getPassword())) {	    	  
+	      if (userFinded != null && passwordEncoder.matches(params.getPassword(), userFinded.getPassword())) {	    	  
 	    	  String token = jwtTokenProvider.createToken(params.getUsername(), Role.ROLE_USER);
 	    	  userFinded.setToken(token);
 	    	  

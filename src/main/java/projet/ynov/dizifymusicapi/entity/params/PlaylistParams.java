@@ -13,6 +13,18 @@ public class PlaylistParams {
     private Date createdAt;
 
     private Date updatedAt;
+    
+    public PlaylistParams() {
+    	super();
+    }
+    
+	public PlaylistParams(String name, Date createdAt, Date updatedAt) {
+		super();
+		this.name = name;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
+	}
+
 
 	public long getId() {
 		return id;

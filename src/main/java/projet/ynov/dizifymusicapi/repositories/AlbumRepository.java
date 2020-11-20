@@ -6,4 +6,6 @@ import projet.ynov.dizifymusicapi.entity.Album;
 
 
 //@Repository
-public interface AlbumRepository extends JpaRepository<Album, Long> {}
+public interface AlbumRepository extends JpaRepository<Album, Long> {
+	Album findByName(String name);
+}

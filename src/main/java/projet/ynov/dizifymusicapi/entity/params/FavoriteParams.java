@@ -12,6 +12,16 @@ public class FavoriteParams {
     private Date createdAt;
 
     private Date updatedAt;
+    
+    public FavoriteParams() {
+    	super();
+    }
+    
+	public FavoriteParams(Date createdAt, Date updatedAt) {
+		super();
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
+	}
 
 	public long getId() {
 		return id;

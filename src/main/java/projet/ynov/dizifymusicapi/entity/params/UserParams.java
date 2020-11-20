@@ -19,6 +19,17 @@ public class UserParams {
 
     private Date updatedAt;
 
+	public UserParams(String image, String email, String username, String password, Date createdAt,
+			Date updatedAt) {
+		super();
+		this.image = image;
+		this.email = email;
+		this.username = username;
+		this.password = password;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
+	}
+
 	public long getId() {
 		return id;
 	}
