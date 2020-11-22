@@ -9,6 +9,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 
+import projet.ynov.dizifymusicapi.entity.Artist;
 import projet.ynov.dizifymusicapi.entity.Playlist;
 import projet.ynov.dizifymusicapi.entity.Title;
 
@@ -50,6 +51,17 @@ public class PlaylistSerializer extends StdSerializer<Playlist> {
 	           jgen.writeStringField("duration", title.getDuration().toString());
 	           jgen.writeStringField("updatedAt", sdf.format(title.getUpdatedAt()));
 	           jgen.writeStringField("createdAt", sdf.format(title.getCreatedAt()));
+	           
+
+	           Artist author = title.getAuthor();
+		       jgen.writeFieldName("author");
+		       jgen.writeStartObject();
+	           jgen.writeNumberField("id", author.getId());
+	           jgen.writeStringField("name", author.getName());
+	           jgen.writeStringField("updatedAt", sdf.format(author.getUpdatedAt()));
+	           jgen.writeStringField("createdAt", sdf.format(author.getCreatedAt()));
+	           jgen.writeEndObject();
+	           
 	           jgen.writeEndObject();
 	        }
 	  	 }
