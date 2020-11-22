@@ -4,6 +4,7 @@ import java.sql.Time;
 import java.util.Date;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -15,6 +16,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -40,13 +43,14 @@ public class Title {
     @Column(name = "duration", nullable = false)
     private Time duration;
 
-    @ManyToOne
+    @ManyToOne()
     private Album album;
     
     @ManyToOne
     private Artist author;
     
     @ManyToMany(mappedBy="titles")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Playlist> playlists;
 
     @Column(name = "created_at", nullable = false)
