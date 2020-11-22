@@ -36,9 +36,11 @@ public class Favorite {
     private User user;
 
 	@ManyToOne
+	@OnDelete(action = OnDeleteAction.CASCADE)
     private Artist artist;
 	
 	@ManyToOne
+	@OnDelete(action = OnDeleteAction.CASCADE)
     private Album album;
 
 	@ManyToOne
