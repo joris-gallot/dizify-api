@@ -69,6 +69,8 @@ public class TitleSerializer extends StdSerializer<Title> {
     	jgen.writeStartObject();
         jgen.writeNumberField("id", author.getId());
         jgen.writeStringField("name", author.getName());
+        jgen.writeStringField("image", author.getImage());
+        jgen.writeStringField("description", author.getDescription());
         jgen.writeStringField("updatedAt", sdf.format(author.getUpdatedAt()));
         jgen.writeStringField("createdAt", sdf.format(author.getCreatedAt()));
         jgen.writeEndObject();
