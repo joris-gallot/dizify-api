@@ -28,6 +28,11 @@ spring.jpa.hibernate.ddl-auto = update
 - admin
     - username: admin
     - password: admin
+
+### Swagger Doc
+
+http://localhost:8080/swagger-ui/
+
 ### Start the server
 
 `$ mvn spring-boot:run`
