@@ -15,6 +15,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -46,9 +48,11 @@ public class Artist {
     private String description;
     
     @OneToMany(mappedBy="author", cascade={CascadeType.ALL})
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Title> titles;
     
     @OneToMany(mappedBy="author", cascade={CascadeType.ALL})
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Album> albums;
     
     @Column(name = "created_at", nullable = false)
